@@ -1,0 +1,289 @@
+.container {
+  min-height: 100vh;
+  background-color: #F7F8FA;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  background-color: #ffffff;
+  gap: 16rpx;
+}
+
+.search-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #F5F5F5;
+  border-radius: 40rpx;
+  padding: 16rpx 24rpx;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.search-input::placeholder {
+  color: #999999;
+}
+
+.clear-btn {
+  font-size: 28rpx;
+  color: #999999;
+  padding: 8rpx;
+}
+
+.search-cancel {
+  font-size: 28rpx;
+  color: #4A90D9;
+  white-space: nowrap;
+}
+
+/* 搜索结果 */
+.search-results {
+  padding-top: 16rpx;
+}
+
+.search-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60rpx 0;
+  color: #999999;
+  font-size: 28rpx;
+}
+
+/* 星期标签 - 固定定位 */
+.day-tabs-fixed {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #ffffff;
+}
+
+.day-tabs {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 16rpx 10rpx;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.day-tab {
+  flex: 1;
+  text-align: center;
+  padding: 12rpx 0;
+  margin: 0 4rpx;
+  border-radius: 12rpx;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.day-tab.active {
+  background-color: #4A90D9;
+  color: #ffffff;
+}
+
+.day-tab.today {
+  border: 2rpx solid #F56C6C;
+}
+
+.day-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.day-date {
+  display: block;
+  font-size: 22rpx;
+  margin-top: 6rpx;
+  opacity: 0.8;
+}
+
+.today-label {
+  display: block;
+  font-size: 18rpx;
+  color: #F56C6C;
+  margin-top: 4rpx;
+}
+
+.update-badge {
+  position: absolute;
+  top: -6rpx;
+  right: 4rpx;
+  background-color: #F56C6C;
+  color: #ffffff;
+  font-size: 18rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 16rpx;
+  min-width: 28rpx;
+}
+
+/* 番剧列表 */
+.anime-list {
+  padding: 16rpx;
+  padding-bottom: 120rpx;
+}
+
+/* 瀑布流容器 */
+.waterfall-container {
+  display: flex;
+  gap: 16rpx;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.anime-card {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.anime-cover {
+  width: 100%;
+  display: block;
+}
+
+/* 信息区域 */
+.card-info {
+  padding: 16rpx;
+}
+
+.anime-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.episode-badge {
+  background-color: #4A90D9;
+  color: #ffffff;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+}
+
+.rating-badge {
+  background-color: #FFF7E6;
+  color: #E6A23C;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+}
+
+/* 订阅按钮 */
+.subscribe-float {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  padding: 8rpx 16rpx;
+  background-color: rgba(74, 144, 217, 0.9);
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.subscribe-text {
+  font-size: 22rpx;
+  color: #ffffff;
+}
+
+.subscribe-float.subscribed {
+  background-color: rgba(103, 194, 58, 0.9);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* 底部提示 */
+.bottom-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 0;
+  gap: 20rpx;
+}
+
+.bottom-line {
+  width: 60rpx;
+  height: 2rpx;
+  background-color: #E0E0E0;
+}
+
+.bottom-text {
+  font-size: 24rpx;
+  color: #CCCCCC;
+}
+
+/* 底部占位 */
+.bottom-placeholder {
+  height: 120rpx;
+}
+
+/* 返回顶部按钮 */
+.back-to-top {
+  position: fixed;
+  right: 40rpx;
+  bottom: 120rpx;
+  width: 90rpx;
+  height: 90rpx;
+  background-color: #4A90D9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(74, 144, 217, 0.4);
+  z-index: 200;
+}
+
+.back-icon {
+  color: #ffffff;
+  font-size: 40rpx;
+  font-weight: bold;
+}

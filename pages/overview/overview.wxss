@@ -1,0 +1,243 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F7F8FA;
+}
+
+/* 搜索栏 */
+.search-bar {
+  display: flex;
+  padding: 20rpx;
+  background-color: #ffffff;
+}
+
+.search-input {
+  flex: 1;
+  height: 70rpx;
+  background-color: #F7F8FA;
+  border-radius: 35rpx;
+  padding: 0 30rpx;
+  font-size: 28rpx;
+}
+
+.search-btn {
+  width: 120rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  text-align: center;
+  color: #4A90D9;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 筛选标签 */
+.filter-tabs {
+  white-space: nowrap;
+  padding: 20rpx;
+  background-color: #ffffff;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.filter-tab {
+  display: inline-block;
+  padding: 12rpx 30rpx;
+  margin-right: 16rpx;
+  font-size: 26rpx;
+  color: #666666;
+  background-color: #F7F8FA;
+  border-radius: 30rpx;
+}
+
+.filter-tab.active {
+  background-color: #4A90D9;
+  color: #ffffff;
+}
+
+/* 视图切换 */
+.view-toggle {
+  display: flex;
+  padding: 16rpx 20rpx;
+  background-color: #ffffff;
+}
+
+.toggle-btn {
+  padding: 10rpx 30rpx;
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.toggle-btn.active {
+  color: #4A90D9;
+  font-weight: bold;
+}
+
+/* 番剧容器 */
+.anime-container {
+  flex: 1;
+  padding: 20rpx;
+}
+
+/* 网格视图 */
+.anime-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+.anime-grid-item {
+  width: calc(50% - 10rpx);
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.grid-cover {
+  width: 100%;
+  height: 280rpx;
+}
+
+.grid-info {
+  padding: 16rpx;
+}
+
+.grid-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid-meta {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.grid-subscribe {
+  padding: 12rpx;
+  text-align: center;
+  font-size: 24rpx;
+  background-color: #4A90D9;
+  color: #ffffff;
+}
+
+.grid-subscribe.subscribed {
+  background-color: #67C23A;
+}
+
+/* 列表视图 */
+.anime-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.anime-list-item {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.list-cover {
+  width: 140rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+}
+
+.list-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.list-name-jp {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 6rpx;
+}
+
+.list-tags {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.list-platform {
+  background-color: #E8F4FD;
+  color: #4A90D9;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.list-time {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.list-genres {
+  display: flex;
+  gap: 10rpx;
+  margin-top: 12rpx;
+  flex-wrap: wrap;
+}
+
+.genre-tag {
+  background-color: #f0f0f0;
+  color: #666666;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.list-subscribe {
+  width: 100rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  background-color: #4A90D9;
+  color: #ffffff;
+  font-size: 24rpx;
+  border-radius: 30rpx;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.list-subscribe.subscribed {
+  background-color: #67C23A;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}

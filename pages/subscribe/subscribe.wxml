@@ -1,0 +1,60 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-num">{{subscribeCount}}</text>
+      <text class="stat-label">订阅番剧</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">{{todayUpdateCount}}</text>
+      <text class="stat-label">今日更新</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-num">{{weekUpdateCount}}</text>
+      <text class="stat-label">本周更新</text>
+    </view>
+  </view>
+
+  <!-- 订阅列表 -->
+  <view class="section-title">订阅列表</view>
+  <scroll-view scroll-y class="subscribe-list">
+    <view 
+      wx:for="{{subscribedAnime}}"
+      wx:key="id"
+      class="subscribe-item"
+      bindtap="goToDetail"
+      data-id="{{item.id}}">
+      <image class="item-cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-name-jp">{{item.nameJp}}</text>
+        <view class="item-meta">
+          <text class="item-platform">{{item.platform}}</text>
+          <text class="item-time">{{item.broadcastDayText}} {{item.broadcastTime}}</text>
+        </view>
+        <view class="item-episode">
+          <text class="episode-current">看到第{{item.currentEpisode}}集</text>
+          <text class="episode-total">共{{item.totalEpisodes}}集</text>
+        </view>
+      </view>
+      <view class="item-actions">
+        <view class="next-update" wx:if="{{item.nextUpdate}}">
+          <text class="next-label">下一集</text>
+          <text class="next-time">{{item.nextUpdate}}</text>
+        </view>
+        <button class="unsubscribe-btn" catchtap="unsubscribe" data-id="{{item.id}}">
+          取消订阅
+        </button>
+      </view>
+    </view>
+
+    <view wx:if="{{subscribedAnime.length === 0}}" class="empty-state">
+      <text class="empty-icon">📭</text>
+      <text class="empty-title">暂无订阅</text>
+      <text class="empty-desc">去时间表页面订阅你喜欢的番剧吧</text>
+      <button class="empty-btn" bindtap="goToIndex">去订阅</button>
+    </view>
+  </scroll-view>
+</view>

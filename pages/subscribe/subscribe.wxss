@@ -1,0 +1,192 @@
+.container {
+  min-height: 100vh;
+  background-color: #F7F8FA;
+  padding: 20rpx;
+}
+
+/* 统计卡片 */
+.stats-card {
+  display: flex;
+  background-color: #4A90D9;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  color: #ffffff;
+  margin-bottom: 20rpx;
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+}
+
+.stat-label {
+  display: block;
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin: 0 20rpx;
+}
+
+/* 区域标题 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+  padding-left: 10rpx;
+}
+
+/* 订阅列表 */
+.subscribe-list {
+  height: calc(100vh - 400rpx);
+}
+
+.subscribe-item {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.item-cover {
+  width: 140rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+}
+
+.item-info {
+  flex: 1;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.item-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.item-name-jp {
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 6rpx;
+}
+
+.item-meta {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.item-platform {
+  background-color: #E8F4FD;
+  color: #4A90D9;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.item-time {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.item-episode {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.episode-current {
+  font-size: 24rpx;
+  color: #67C23A;
+}
+
+.episode-total {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.next-update {
+  text-align: right;
+}
+
+.next-label {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.next-time {
+  display: block;
+  font-size: 24rpx;
+  color: #F56C6C;
+  margin-top: 4rpx;
+}
+
+.unsubscribe-btn {
+  font-size: 24rpx;
+  padding: 12rpx 24rpx;
+  background-color: #F56C6C;
+  color: #ffffff;
+  border-radius: 30rpx;
+  border: none;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 40rpx;
+}
+
+.empty-btn {
+  background-color: #4A90D9;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 20rpx 60rpx;
+  border-radius: 40rpx;
+  border: none;
+}

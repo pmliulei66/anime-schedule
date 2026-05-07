@@ -1,0 +1,47 @@
+page {
+  background-color: #F7F8FA;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+.container {
+  min-height: 100vh;
+  padding: 20rpx;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  background-color: #4A90D9;
+  color: #ffffff;
+  border-radius: 40rpx;
+  padding: 20rpx 60rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #666666;
+  border-radius: 40rpx;
+  padding: 20rpx 60rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+.text-primary {
+  color: #4A90D9;
+}
+
+.text-secondary {
+  color: #999999;
+}
+
+.text-bold {
+  font-weight: bold;
+}

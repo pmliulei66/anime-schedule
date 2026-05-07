@@ -1,0 +1,37 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/subscribe/subscribe",
+    "pages/overview/overview",
+    "pages/anime-detail/anime-detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarTitleText": "新番时间表",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4A90D9",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "时间表",
+        "iconPath": "assets/icons/calendar.png",
+        "selectedIconPath": "assets/icons/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/subscribe/subscribe",
+        "text": "订阅",
+        "iconPath": "assets/icons/subscribe.png",
+        "selectedIconPath": "assets/icons/subscribe-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

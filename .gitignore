@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# WeChat Mini Program
+project.private.config.json
+miniprogram_npm/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Trae workspace
+.trae-cn/

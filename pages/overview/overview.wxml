@@ -1,0 +1,89 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input 
+      class="search-input" 
+      placeholder="搜索番剧名称"
+      value="{{searchKey}}"
+      bindinput="onSearchInput"
+      bindconfirm="onSearch"/>
+    <text class="search-btn" bindtap="onSearch">搜索</text>
+  </view>
+
+  <!-- 筛选标签 -->
+  <scroll-view scroll-x class="filter-tabs">
+    <view 
+      wx:for="{{filterOptions}}"
+      wx:key="index"
+      class="filter-tab {{selectedFilter === index ? 'active' : ''}}"
+      bindtap="selectFilter"
+      data-index="{{index}}">
+      {{item}}
+    </view>
+  </scroll-view>
+
+  <!-- 视图切换 -->
+  <view class="view-toggle">
+    <text 
+      class="toggle-btn {{viewMode === 'grid' ? 'active' : ''}}"
+      bindtap="setViewMode"
+      data-mode="grid">网格</text>
+    <text 
+      class="toggle-btn {{viewMode === 'list' ? 'active' : ''}}"
+      bindtap="setViewMode"
+      data-mode="list">列表</text>
+  </view>
+
+  <!-- 番剧列表/网格 -->
+  <scroll-view scroll-y class="anime-container">
+    <!-- 网格视图 -->
+    <view wx:if="{{viewMode === 'grid'}}" class="anime-grid">
+      <view 
+        wx:for="{{filteredAnime}}"
+        wx:key="id"
+        class="anime-grid-item"
+        bindtap="goToDetail"
+        data-id="{{item.id}}">
+        <image class="grid-cover" src="{{item.cover}}" mode="aspectFill"></image>
+        <view class="grid-info">
+          <text class="grid-name">{{item.name}}</text>
+          <text class="grid-meta">{{item.platform}} · {{item.broadcastDayText}} {{item.broadcastTime}}</text>
+        </view>
+        <view class="grid-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" bindtap="toggleSubscribe">
+          {{item.isSubscribed ? '已订阅' : '订阅'}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 列表视图 -->
+    <view wx:else class="anime-list">
+      <view 
+        wx:for="{{filteredAnime}}"
+        wx:key="id"
+        class="anime-list-item"
+        bindtap="goToDetail"
+        data-id="{{item.id}}">
+        <image class="list-cover" src="{{item.cover}}" mode="aspectFill"></image>
+        <view class="list-info">
+          <text class="list-name">{{item.name}}</text>
+          <text class="list-name-jp">{{item.nameJp}}</text>
+          <view class="list-tags">
+            <text class="list-platform">{{item.broadcastDayText}}</text>
+            <text class="list-time" wx:if="{{item.rating}}">⭐ {{item.rating}}</text>
+          </view>
+          <view class="list-genres">
+            <text wx:for="{{item.genre}}" wx:for-item="tag" wx:key="index" class="genre-tag">{{tag}}</text>
+          </view>
+        </view>
+        <view class="list-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" bindtap="toggleSubscribe">
+          {{item.isSubscribed ? '已订阅' : '订阅'}}
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{filteredAnime.length === 0}}" class="empty-state">
+      <text class="empty-icon">🔍</text>
+      <text class="empty-text">没有找到相关番剧</text>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,64 @@
+.custom-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  padding: 0 16rpx;
+  position: relative;
+}
+
+.nav-left {
+  width: 120rpx;
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow {
+  width: 20rpx;
+  height: 20rpx;
+  border-left: 4rpx solid currentColor;
+  border-bottom: 4rpx solid currentColor;
+  transform: rotate(45deg);
+  margin-left: 8rpx;
+}
+
+.nav-logo-wrap {
+  display: flex;
+  align-items: center;
+  padding: 8rpx;
+}
+
+.nav-logo {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 12rpx;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 120rpx;
+}
+
+.nav-right {
+  width: 120rpx;
+}
