@@ -78,7 +78,7 @@ function transformItem(item) {
     name: item.name_cn || item.name || '',
     nameJp: item.name || '',
     nameEn: '',
-    cover: item.images ? item.images.common : '',
+    cover: item.images ? (item.images.large || item.images.common) : '',
     platform: '日本放送',
     broadcastDay: item.air_weekday || 0,
     broadcastTime: '',

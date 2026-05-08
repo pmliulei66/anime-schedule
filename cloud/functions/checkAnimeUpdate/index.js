@@ -58,14 +58,20 @@ exports.main = async (event, context) => {
       // 6. 发送订阅消息
       for (const anime of updatedAnime) {
         try {
+          // 模板字段：
+          // date4: 更新时间
+          // thing6: 资讯标题（番剧名称）
+          // thing8: 资讯摘要
+          // thing10: 更新内容
           await cloud.openapi.subscribeMessage.send({
             touser: user.openid,
             templateId: TEMPLATE_ID,
             page: `pages/anime-detail/anime-detail?id=${anime.id}`,
             data: {
-              thing1: { value: anime.name.substring(0, 20) }, // 番剧名称（限20字）
-              thing2: { value: `第${anime.currentEpisode}集` }, // 更新集数
-              date3: { value: formatDate(now) } // 更新日期
+              date4: { value: formatDate(now) },                           // 更新时间
+              thing6: { value: truncate(anime.name, 20) },                 // 资讯标题（番剧名称）
+              thing8: { value: truncate(anime.description || '新番更新', 20) }, // 资讯摘要
+              thing10: { value: `第${anime.currentEpisode}集已更新` }       // 更新内容
             },
             miniprogramState: 'formal'
           });
@@ -108,7 +114,8 @@ async function fetchBangumiCalendar(dayOfWeek) {
     return dayGroup.items.map(item => ({
       id: String(item.id),
       name: item.name_cn || item.name || '未知番剧',
-      currentEpisode: estimateCurrentEpisode(item.air_date, item.eps_count || 12)
+      currentEpisode: estimateCurrentEpisode(item.air_date, item.eps_count || 12),
+      description: item.summary || ''
     }));
   } catch (err) {
     console.error('获取 Bangumi 日历失败:', err);
@@ -133,4 +140,10 @@ function formatDate(date) {
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const d = String(date.getDate()).padStart(2, '0');
   return `${y}-${m}-${d}`;
+}
+
+// 截断字符串
+function truncate(str, maxLen) {
+  if (!str) return '';
+  return str.length > maxLen ? str.substring(0, maxLen) : str;
 }
