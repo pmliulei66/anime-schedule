@@ -1,9 +1,10 @@
 // utils/animeData.js - 番剧数据管理工具
-// 现在从 Bangumi API 获取真实数据，硬编码数据作为 fallback
+// 多数据源支持：Bangumi (主) -> AniList (备用) -> 本地 fallback
 
 const api = require('./api.js');
+const anilist = require('./anilist.js');
 
-// ==================== Fallback 数据（网络不可用时使用） ====================
+// ==================== Fallback 数据（网络完全不可用时使用） ====================
 
 function getFallbackAnime() {
   return [
@@ -46,42 +47,72 @@ function getFallbackAnime() {
   ];
 }
 
-// ==================== 对外接口（优先从 API 获取） ====================
+// ==================== 多数据源获取策略 ====================
 
-// 获取每周放送日历（按星期分组）
+// 获取每周放送日历（Bangumi -> AniList -> Fallback）
 function getCalendarData() {
-  return api.fetchCalendar().catch(() => {
-    // fallback: 将 fallback 数据按星期分组
-    const fallback = getFallbackAnime();
-    const result = [];
-    for (let i = 1; i <= 7; i++) {
-      result.push({
-        weekday: { id: i, cn: getDayText(i), en: '', ja: '' },
-        items: fallback.filter(a => a.broadcastDay == i)
-      });
-    }
-    return result;
-  });
+  return api.fetchCalendar()
+    .catch(err => {
+      console.log('Bangumi API 失败，尝试 AniList...', err.message);
+      return anilist.fetchCalendar();
+    })
+    .catch(err => {
+      console.log('AniList API 失败，使用本地 fallback...', err.message);
+      const fallback = getFallbackAnime();
+      const result = [];
+      for (let i = 1; i <= 7; i++) {
+        result.push({
+          weekday: { id: i, cn: getDayText(i), en: '', ja: '' },
+          items: fallback.filter(a => a.broadcastDay == i)
+        });
+      }
+      return result;
+    });
 }
 
-// 获取所有番剧（从日历聚合）
+// 获取所有番剧（Bangumi -> AniList -> Fallback）
 function getAllAnime() {
-  return api.fetchAllAnime().catch(() => {
-    return getFallbackAnime();
-  });
+  return api.fetchAllAnime()
+    .catch(err => {
+      console.log('Bangumi API 失败，尝试 AniList...', err.message);
+      return anilist.fetchAiringAnime();
+    })
+    .catch(err => {
+      console.log('AniList API 失败，使用本地 fallback...', err.message);
+      return getFallbackAnime();
+    });
 }
 
-// 根据 ID 获取番剧详情
+// 根据 ID 获取番剧详情（Bangumi -> AniList -> Fallback）
 function getAnimeById(id) {
-  return api.fetchAnimeDetail(id).catch(() => {
-    const fallback = getFallbackAnime();
-    return fallback.find(a => a.id == id) || null;
-  });
+  return api.fetchAnimeDetail(id)
+    .catch(err => {
+      console.log('Bangumi API 失败，尝试 AniList...', err.message);
+      return anilist.fetchAnimeDetail(id);
+    })
+    .catch(err => {
+      console.log('AniList API 失败，使用本地 fallback...', err.message);
+      const fallback = getFallbackAnime();
+      return fallback.find(a => a.id == id) || null;
+    });
 }
 
-// 搜索番剧
+// 搜索番剧（Bangumi -> AniList）
 function searchAnime(keyword) {
-  return api.searchAnime(keyword);
+  return api.searchAnime(keyword)
+    .catch(err => {
+      console.log('Bangumi 搜索失败，尝试 AniList...', err.message);
+      return anilist.searchAnime(keyword);
+    })
+    .catch(err => {
+      console.log('AniList 搜索失败，使用本地 fallback...', err.message);
+      const fallback = getFallbackAnime();
+      const lowerKeyword = keyword.toLowerCase();
+      return fallback.filter(a => 
+        a.name.toLowerCase().includes(lowerKeyword) ||
+        a.nameJp.toLowerCase().includes(lowerKeyword)
+      );
+    });
 }
 
 // 获取番剧类型列表
