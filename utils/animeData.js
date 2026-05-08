@@ -9,7 +9,7 @@ function getFallbackAnime() {
   return [
     {
       id: '1', name: '咒术回战', nameJp: '呪術廻戦',
-      cover: 'https://lain.bgm.tv/pic/cover/c/ab/77/472741_MqsB8.jpg',
+      cover: 'https://img.zcool.cn/community/01e6875d49e8f7a8012187f447b5cd.jpg@1280w_1l_2o_100sh.jpg',
       platform: '日本放送', broadcastDay: 4, broadcastTime: '',
       broadcastDayText: '周四', startDate: '2026-01-08',
       currentEpisode: 12, totalEpisodes: 12, genre: [],
@@ -18,12 +18,30 @@ function getFallbackAnime() {
     },
     {
       id: '2', name: '排球少年', nameJp: 'ハイキュー!!',
-      cover: 'https://lain.bgm.tv/pic/cover/c/2e/7d/93182_2U4d4.jpg',
+      cover: 'https://img.zcool.cn/community/01e8d95e3a6f95a801213f26c19c18.jpg@1280w_1l_2o_100sh.jpg',
       platform: '日本放送', broadcastDay: 5, broadcastTime: '',
       broadcastDayText: '周五', startDate: '2014-04-06',
       currentEpisode: 25, totalEpisodes: 25, genre: [],
       status: 'finished', description: '少年日向翔阳在初中比赛中看到乌野高中排球队的比赛后...',
       rating: 8.5, rank: 0, collection: { doing: 0 }
+    },
+    {
+      id: '3', name: '鬼灭之刃', nameJp: '鬼滅の刃',
+      cover: 'https://img.zcool.cn/community/01786557fb8a59a8012187f4a7e5d8.jpg@1280w_1l_2o_100sh.jpg',
+      platform: '日本放送', broadcastDay: 6, broadcastTime: '',
+      broadcastDayText: '周六', startDate: '2019-04-06',
+      currentEpisode: 26, totalEpisodes: 26, genre: [],
+      status: 'finished', description: '大正时代，卖炭少年炭治郎过着平凡的生活...',
+      rating: 8.7, rank: 0, collection: { doing: 0 }
+    },
+    {
+      id: '4', name: '进击的巨人', nameJp: '進撃の巨人',
+      cover: 'https://img.zcool.cn/community/01e6875d49e8f7a8012187f447b5cd.jpg@1280w_1l_2o_100sh.jpg',
+      platform: '日本放送', broadcastDay: 0, broadcastTime: '',
+      broadcastDayText: '周日', startDate: '2013-04-07',
+      currentEpisode: 87, totalEpisodes: 87, genre: [],
+      status: 'finished', description: '人类与巨人的战斗持续了百年...',
+      rating: 9.0, rank: 0, collection: { doing: 0 }
     }
   ];
 }

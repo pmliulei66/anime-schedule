@@ -37,14 +37,17 @@ function request(url, method = 'GET') {
       header: {
         'Content-Type': 'application/json'
       },
+      timeout: 15000, // 15秒超时
       success(res) {
         if (res.statusCode === 200) {
           resolve(res.data);
         } else {
+          console.warn(`API请求失败: ${url}, 状态码: ${res.statusCode}`);
           reject(new Error('请求失败: ' + res.statusCode));
         }
       },
       fail(err) {
+        console.warn(`API请求失败: ${url}`, err.errMsg);
         reject(err);
       }
     });

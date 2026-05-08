@@ -1,0 +1,10 @@
+{
+  "name": "checkAnimeUpdate",
+  "version": "1.0.0",
+  "description": "检查番剧更新并发送订阅消息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "node-fetch": "^2.6.1"
+  }
+}
