@@ -8,6 +8,56 @@ page {
   padding: 20rpx;
 }
 
+/* 全局加载动画 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+  animation: fadeIn 0.4s ease;
+}
+
+/* 主内容淡入 */
+.content-fade-in {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loading-spinner {
+  width: 80rpx;
+  height: 80rpx;
+  border: 6rpx solid #E8E8E8;
+  border-top-color: #4A90D9;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.loading-cat {
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+  animation: bounce 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10rpx); }
+}
+
 .card {
   background-color: #ffffff;
   border-radius: 16rpx;

@@ -1,5 +1,14 @@
 <view class="container">
-  <!-- 搜索栏 -->
+  <!-- 加载动画 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <text class="loading-cat">🐱</text>
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中哦喵~</text>
+  </view>
+
+  <!-- 主内容 -->
+  <block wx:if="{{!loading}}">
+  <view class="content-fade-in">
   <view class="search-bar">
     <view class="search-input-wrap">
       <text class="search-icon">🔍</text>
@@ -18,8 +27,10 @@
 
   <!-- 搜索结果 -->
   <view class="search-results" wx:if="{{isSearching}}">
-    <view wx:if="{{searchLoading}}" class="search-loading">
-      <text>搜索中...</text>
+    <view wx:if="{{searchLoading}}" class="loading-container">
+      <text class="loading-cat">🐱</text>
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中哦喵~</text>
     </view>
     <view wx:elif="{{searchResults.length > 0}}" class="anime-list">
       <view class="waterfall-container">
@@ -149,6 +160,8 @@
       <view class="bottom-placeholder"></view>
     </view>
   </view>
+  </view>
+  </block>
 
   <!-- 返回顶部按钮 -->
   <view class="back-to-top" wx:if="{{showBackTop}}" bindtap="goToTop">

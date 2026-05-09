@@ -53,14 +53,6 @@
   padding-top: 16rpx;
 }
 
-.search-loading {
-  display: flex;
-  justify-content: center;
-  padding: 60rpx 0;
-  color: #999999;
-  font-size: 28rpx;
-}
-
 /* 星期标签 - 固定定位 */
 .day-tabs-fixed {
   position: sticky;

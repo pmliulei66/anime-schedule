@@ -1,4 +1,14 @@
 <view class="container">
+  <!-- 加载动画 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <text class="loading-cat">🐱</text>
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中哦喵~</text>
+  </view>
+
+  <!-- 主内容 -->
+  <block wx:if="{{!loading}}">
+  <view class="content-fade-in">
   <!-- 统计卡片 -->
   <view class="stats-card">
     <view class="stat-item">
@@ -34,18 +44,9 @@
         color="#4A90D9">
       </switch>
     </view>
-    <view class="notification-hint" wx:if="{{notificationEnabled}}">
-      <text>每次授权可推送一次，订阅番剧越多请多授权几次</text>
-    </view>
-    <button 
-      class="auth-btn" 
-      wx:if="{{notificationEnabled}}"
-      bindtap="requestSubscribeMessage">
-      授权推送通知
-    </button>
   </view>
 
-  <!-- 订阅列表 - 瀑布流布局 -->
+  <!-- 订阅列表 -->
   <view class="anime-list" wx:if="{{subscribedAnime.length > 0}}">
     <view class="waterfall-container">
       <!-- 左列 -->
@@ -102,4 +103,6 @@
     <text class="empty-desc">去时间表页面订阅你喜欢的番剧吧</text>
     <button class="empty-btn" bindtap="goToIndex">去订阅</button>
   </view>
+  </view>
+  </block>
 </view>

@@ -36,14 +36,36 @@ Page({
   // 切换推送通知开关
   toggleNotification(e) {
     const enabled = e.detail.value;
-    const settings = wx.getStorageSync('userSettings') || {};
-    settings.notificationEnabled = enabled;
-    wx.setStorageSync('userSettings', settings);
-    this.setData({ notificationEnabled: enabled });
 
     if (enabled) {
-      wx.showToast({ title: '已开启推送', icon: 'success' });
+      // 开启时直接弹出授权
+      wx.requestSubscribeMessage({
+        tmplIds: [TEMPLATE_ID],
+        success: (res) => {
+          if (res[TEMPLATE_ID] === 'accept') {
+            const settings = wx.getStorageSync('userSettings') || {};
+            settings.notificationEnabled = true;
+            wx.setStorageSync('userSettings', settings);
+            this.setData({ notificationEnabled: true });
+            wx.showToast({ title: '已开启推送', icon: 'success' });
+          } else {
+            // 用户拒绝授权，开关保持关闭
+            this.setData({ notificationEnabled: false });
+            wx.showToast({ title: '需要授权才能推送', icon: 'none' });
+          }
+        },
+        fail: (err) => {
+          console.error('订阅授权失败:', err);
+          this.setData({ notificationEnabled: false });
+          wx.showToast({ title: '授权失败', icon: 'none' });
+        }
+      });
     } else {
+      // 关闭推送
+      const settings = wx.getStorageSync('userSettings') || {};
+      settings.notificationEnabled = false;
+      wx.setStorageSync('userSettings', settings);
+      this.setData({ notificationEnabled: false });
       wx.showToast({ title: '已关闭推送', icon: 'none' });
     }
 

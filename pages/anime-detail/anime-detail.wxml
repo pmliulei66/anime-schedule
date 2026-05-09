@@ -1,4 +1,14 @@
 <view class="container">
+  <!-- 加载动画 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <text class="loading-cat">🐱</text>
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中哦喵~</text>
+  </view>
+
+  <!-- 主内容 -->
+  <block wx:if="{{!loading}}">
+  <view class="content-fade-in">
   <!-- 封面图：按原始比例全宽展示 -->
   <view class="cover-wrapper">
     <image 
@@ -64,4 +74,6 @@
 
   <!-- 底部安全区 -->
   <view class="safe-bottom"></view>
+  </view>
+  </block>
 </view>
