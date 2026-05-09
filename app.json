@@ -6,15 +6,15 @@
     "pages/anime-detail/anime-detail"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#4A90D9",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FEFCF3",
     "navigationBarTitleText": "新番时间表",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "black"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#4A90D9",
-    "backgroundColor": "#ffffff",
+    "color": "#1A1A1A",
+    "selectedColor": "#C8FF00",
+    "backgroundColor": "#FEFCF3",
     "borderStyle": "black",
     "list": [
       {

@@ -8,9 +8,18 @@ Page({
     selectedDay: 0,
     todayIndex: 0,
     weekDays: [],
-    currentDayAnime: [],
-    leftColumn: [],
-    rightColumn: [],
+    // Swiper 数据 - 7天的番剧数据
+    dayAnimeList: [[], [], [], [], [], [], []],
+    dayColumns: [
+      { left: [], right: [] },
+      { left: [], right: [] },
+      { left: [], right: [] },
+      { left: [], right: [] },
+      { left: [], right: [] },
+      { left: [], right: [] },
+      { left: [], right: [] }
+    ],
+    scrollPositions: [0, 0, 0, 0, 0, 0, 0],
     calendarData: [],
     loading: true,
     showBackTop: false,
@@ -20,34 +29,18 @@ Page({
     searchLoading: false,
     searchResults: [],
     searchLeftColumn: [],
-    searchRightColumn: []
+    searchRightColumn: [],
+    scrollWithAnimation: false
   },
 
-  // 每天的滚动位置记忆
-  scrollPositions: null,
-
   onLoad() {
-    // 初始化滚动位置记录
-    this.scrollPositions = {};
     this.initWeekData();
-    this.loadAnimeData();
+    // 先尝试从缓存加载数据
+    this.loadFromCache();
   },
 
   onShow() {
     this.updateSubscribeStatus();
-    // 恢复当前日期的滚动位置
-    const savedTop = this.scrollPositions[this.data.selectedDay] || 0;
-    if (savedTop > 0) {
-      wx.pageScrollTo({
-        scrollTop: savedTop,
-        duration: 0
-      });
-    }
-  },
-
-  onHide() {
-    // 保存当前日期的滚动位置
-    this.scrollPositions[this.data.selectedDay] = this.currentScrollTop || 0;
   },
 
   // 初始化周数据
@@ -87,93 +80,147 @@ Page({
     return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
   },
 
+  // 从缓存加载数据
+  loadFromCache() {
+    const cachedData = wx.getStorageSync('calendarCache');
+    const cacheTime = wx.getStorageSync('calendarCacheTime');
+    const now = Date.now();
+    
+    // 缓存有效期：30分钟
+    const CACHE_VALID_TIME = 30 * 60 * 1000;
+    
+    if (cachedData && cacheTime && (now - cacheTime) < CACHE_VALID_TIME) {
+      console.log('使用缓存数据');
+      this.processCalendarData(cachedData);
+    } else {
+      console.log('缓存过期或不存在，从网络加载');
+      this.loadAnimeData();
+    }
+  },
+
+  // 保存数据到缓存
+  saveToCache(calendarData) {
+    wx.setStorageSync('calendarCache', calendarData);
+    wx.setStorageSync('calendarCacheTime', Date.now());
+  },
+
+  // 处理日历数据（复用逻辑）
+  processCalendarData(calendarData) {
+    // 更新每天的番剧数量
+    const weekDays = this.data.weekDays.map((day, index) => {
+      const dayGroup = calendarData.find(g => g.weekday.id == index + 1);
+      const count = dayGroup ? dayGroup.items.length : 0;
+      return { ...day, count };
+    });
+
+    // 处理7天的数据
+    const dayAnimeList = [];
+    const dayColumns = [];
+    
+    for (let i = 0; i < 7; i++) {
+      const dayGroup = calendarData.find(g => g.weekday.id == i + 1);
+      let dayAnime = dayGroup ? dayGroup.items : [];
+
+      // 更新订阅状态
+      const subscribedIds = wx.getStorageSync('subscribedIds') || [];
+      dayAnime = dayAnime.map(anime => ({
+        ...anime,
+        isSubscribed: subscribedIds.includes(anime.id)
+      }));
+
+      // 排序
+      dayAnime.sort((a, b) => {
+        const ratingA = a.rating || 0;
+        const ratingB = b.rating || 0;
+        if (ratingB !== ratingA) {
+          return ratingB - ratingA;
+        }
+        const nameA = (a.name || a.nameJp || '').toLowerCase();
+        const nameB = (b.name || b.nameJp || '').toLowerCase();
+        return nameA.localeCompare(nameB, 'zh-CN');
+      });
+
+      // 分配到左右两列
+      const left = [];
+      const right = [];
+      dayAnime.forEach((anime, idx) => {
+        if (idx % 2 === 0) {
+          left.push(anime);
+        } else {
+          right.push(anime);
+        }
+      });
+
+      dayAnimeList.push(dayAnime);
+      dayColumns.push({ left, right });
+    }
+
+    this.setData({
+      calendarData: calendarData,
+      weekDays: weekDays,
+      dayAnimeList: dayAnimeList,
+      dayColumns: dayColumns,
+      loading: false
+    });
+  },
+
   // 从 Bangumi API 加载番剧数据
   loadAnimeData() {
     this.setData({ loading: true });
     
     animeData.getCalendarData().then(calendarData => {
-      // 更新每天的番剧数量
-      const weekDays = this.data.weekDays.map((day, index) => {
-        const dayGroup = calendarData.find(g => g.weekday.id == index + 1);
-        const count = dayGroup ? dayGroup.items.length : 0;
-        return { ...day, count };
-      });
-
-      this.setData({
-        calendarData: calendarData,
-        weekDays: weekDays,
-        loading: false
-      });
-
-      this.filterAnimeByDay();
+      // 保存到缓存
+      this.saveToCache(calendarData);
+      // 处理数据
+      this.processCalendarData(calendarData);
     }).catch(() => {
       this.setData({ loading: false });
       wx.showToast({ title: '数据加载失败', icon: 'none' });
     });
   },
 
-  // 根据选中日期筛选番剧
-  filterAnimeByDay() {
-    const selectedDay = this.data.selectedDay;
-    const dayGroup = this.data.calendarData.find(g => g.weekday.id == selectedDay + 1);
-    let dayAnime = dayGroup ? dayGroup.items : [];
-
-    // 更新订阅状态
-    const subscribedIds = wx.getStorageSync('subscribedIds') || [];
-    let currentDayAnime = dayAnime.map(anime => ({
-      ...anime,
-      isSubscribed: subscribedIds.includes(anime.id)
-    }));
-
-    // 排序：先按评分从高到低，评分相同按名称首字母排序
-    currentDayAnime.sort((a, b) => {
-      const ratingA = a.rating || 0;
-      const ratingB = b.rating || 0;
-      if (ratingB !== ratingA) {
-        return ratingB - ratingA; // 评分高的在前
-      }
-      // 评分相同，按名称首字母排序
-      const nameA = (a.name || a.nameJp || '').toLowerCase();
-      const nameB = (b.name || b.nameJp || '').toLowerCase();
-      return nameA.localeCompare(nameB, 'zh-CN');
-    });
-
-    // 分配到左右两列（交替分配实现错位效果）
-    const leftColumn = [];
-    const rightColumn = [];
-    currentDayAnime.forEach((anime, index) => {
-      if (index % 2 === 0) {
-        leftColumn.push(anime);
-      } else {
-        rightColumn.push(anime);
-      }
-    });
-
-    this.setData({
-      currentDayAnime: currentDayAnime,
-      leftColumn: leftColumn,
-      rightColumn: rightColumn
+  // Swiper 切换事件
+  onSwiperChange(e) {
+    const newIndex = e.detail.current;
+    this.setData({ 
+      selectedDay: newIndex,
+      showBackTop: false
     });
   },
 
-  // 选择星期
+  // 点击星期标签
   selectDay(e) {
-    const index = e.currentTarget.dataset.index;
-    
-    // 保存当前日期的滚动位置
-    this.scrollPositions[this.data.selectedDay] = this.currentScrollTop || 0;
-    
-    // 切换日期
+    const index = parseInt(e.currentTarget.dataset.index);
     this.setData({ selectedDay: index });
-    this.filterAnimeByDay();
+  },
+
+  // 滚动监听 - 每个 scroll-view 独立
+  onScroll(e) {
+    const scrollTop = e.detail.scrollTop;
+    const index = this.data.selectedDay;
+    const positions = this.data.scrollPositions;
+    positions[index] = scrollTop;
     
-    // 切换后回到顶部
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 0
+    this.setData({ 
+      scrollPositions: positions,
+      showBackTop: scrollTop > 300
     });
-    this.currentScrollTop = 0;
-    this.setData({ showBackTop: false });
+  },
+
+  // 返回顶部
+  goToTop() {
+    const index = this.data.selectedDay;
+    const positions = this.data.scrollPositions;
+    positions[index] = 0;
+    this.setData({ 
+      scrollPositions: positions,
+      showBackTop: false,
+      scrollWithAnimation: true
+    });
+    // 重置动画标志
+    setTimeout(() => {
+      this.setData({ scrollWithAnimation: false });
+    }, 300);
   },
 
   // 切换上一周
@@ -215,46 +262,53 @@ Page({
   // 更新订阅状态
   updateSubscribeStatus() {
     const subscribedIds = wx.getStorageSync('subscribedIds') || [];
-    const updateColumn = (column) => column.map(anime => ({
-      ...anime,
-      isSubscribed: subscribedIds.includes(anime.id)
-    }));
     
+    // 更新7天的数据
+    const dayAnimeList = this.data.dayAnimeList.map(dayAnime => 
+      dayAnime.map(anime => ({
+        ...anime,
+        isSubscribed: subscribedIds.includes(anime.id)
+      }))
+    );
+    
+    const dayColumns = dayAnimeList.map(dayAnime => {
+      const left = [];
+      const right = [];
+      dayAnime.forEach((anime, idx) => {
+        if (idx % 2 === 0) {
+          left.push(anime);
+        } else {
+          right.push(anime);
+        }
+      });
+      return { left, right };
+    });
+
     const data = {
-      currentDayAnime: updateColumn(this.data.currentDayAnime),
-      leftColumn: updateColumn(this.data.leftColumn),
-      rightColumn: updateColumn(this.data.rightColumn)
+      dayAnimeList: dayAnimeList,
+      dayColumns: dayColumns
     };
 
     // 同时更新搜索结果的订阅状态
     if (this.data.searchResults.length > 0) {
-      data.searchResults = updateColumn(this.data.searchResults);
-      data.searchLeftColumn = updateColumn(this.data.searchLeftColumn);
-      data.searchRightColumn = updateColumn(this.data.searchRightColumn);
+      data.searchResults = this.data.searchResults.map(anime => ({
+        ...anime,
+        isSubscribed: subscribedIds.includes(anime.id)
+      }));
+      const searchLeftColumn = [];
+      const searchRightColumn = [];
+      data.searchResults.forEach((anime, idx) => {
+        if (idx % 2 === 0) {
+          searchLeftColumn.push(anime);
+        } else {
+          searchRightColumn.push(anime);
+        }
+      });
+      data.searchLeftColumn = searchLeftColumn;
+      data.searchRightColumn = searchRightColumn;
     }
 
     this.setData(data);
-  },
-
-  // 页面滚动监听
-  onPageScroll(e) {
-    const scrollTop = e.scrollTop;
-    // 保存当前滚动位置
-    this.currentScrollTop = scrollTop;
-    // 滚动超过 300px 显示返回顶部按钮
-    if (scrollTop > 300 && !this.data.showBackTop) {
-      this.setData({ showBackTop: true });
-    } else if (scrollTop <= 300 && this.data.showBackTop) {
-      this.setData({ showBackTop: false });
-    }
-  },
-
-  // 返回顶部
-  goToTop() {
-    wx.pageScrollTo({
-      scrollTop: 0,
-      duration: 300
-    });
   },
 
   // ==================== 搜索功能 ====================
@@ -264,13 +318,11 @@ Page({
     const keyword = e.detail.value;
     this.setData({ searchKeyword: keyword });
     
-    // 输入为空时退出搜索模式
     if (!keyword.trim()) {
       this.cancelSearch();
       return;
     }
     
-    // 防抖：延迟执行搜索
     if (this.searchTimer) {
       clearTimeout(this.searchTimer);
     }
@@ -292,13 +344,11 @@ Page({
       searchLoading: true 
     });
 
-    // 先从本地数据模糊搜索
     const localResults = this.localSearch(keyword);
     
     if (localResults.length > 0) {
       this.setSearchResults(localResults);
     } else {
-      // 本地无结果，调用 API 搜索
       animeData.searchAnime(keyword).then(results => {
         this.setSearchResults(results);
       }).catch(() => {
@@ -315,8 +365,8 @@ Page({
   // 本地模糊搜索
   localSearch(keyword) {
     const allAnime = [];
-    this.data.calendarData.forEach(dayGroup => {
-      dayGroup.items.forEach(item => {
+    this.data.dayAnimeList.forEach(dayAnime => {
+      dayAnime.forEach(item => {
         allAnime.push(item);
       });
     });
@@ -325,7 +375,6 @@ Page({
     return allAnime.filter(anime => {
       const name = (anime.name || '').toLowerCase();
       const nameJp = (anime.nameJp || '').toLowerCase();
-      // 模糊匹配：名称或日文名包含关键词
       return name.includes(lowerKeyword) || nameJp.includes(lowerKeyword);
     });
   },
@@ -338,7 +387,6 @@ Page({
       isSubscribed: subscribedIds.includes(anime.id)
     }));
 
-    // 分配到左右两列
     const searchLeftColumn = [];
     const searchRightColumn = [];
     searchResults.forEach((anime, index) => {
@@ -376,5 +424,17 @@ Page({
       searchLeftColumn: [],
       searchRightColumn: []
     });
+  },
+
+  // 搜索聚焦
+  onSearchFocus() {
+    // 可以在这里添加搜索建议
+  },
+
+  // 图片加载失败处理
+  onImageError(e) {
+    const animeId = e.currentTarget.dataset.id;
+    console.log('图片加载失败:', animeId);
+    // 可以在这里设置默认占位图
   }
 });

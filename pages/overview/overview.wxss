@@ -2,23 +2,29 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #F7F8FA;
+  background-color: #FEFCF3;
+  background-image: radial-gradient(#1A1A1A 1rpx, transparent 1rpx);
+  background-size: 24rpx 24rpx;
 }
 
 /* 搜索栏 */
 .search-bar {
   display: flex;
-  padding: 20rpx;
+  padding: 20rpx 24rpx;
   background-color: #ffffff;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .search-input {
   flex: 1;
   height: 70rpx;
-  background-color: #F7F8FA;
-  border-radius: 35rpx;
+  background-color: #FEFCF3;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
   padding: 0 30rpx;
   font-size: 28rpx;
+  color: #1A1A1A;
 }
 
 .search-btn {
@@ -26,17 +32,26 @@
   height: 70rpx;
   line-height: 70rpx;
   text-align: center;
-  color: #4A90D9;
+  color: #1A1A1A;
   font-size: 28rpx;
   font-weight: bold;
+  background-color: #C8FF00;
+  border: 4rpx solid #1A1A1A;
+  border-radius: 16rpx;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
+}
+
+.search-btn:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
 }
 
 /* 筛选标签 */
 .filter-tabs {
   white-space: nowrap;
-  padding: 20rpx;
+  padding: 20rpx 24rpx;
   background-color: #ffffff;
-  border-bottom: 1rpx solid #eeeeee;
+  border: 4rpx solid #1A1A1A;
 }
 
 .filter-tab {
@@ -44,38 +59,52 @@
   padding: 12rpx 30rpx;
   margin-right: 16rpx;
   font-size: 26rpx;
-  color: #666666;
-  background-color: #F7F8FA;
-  border-radius: 30rpx;
+  color: #1A1A1A;
+  background-color: #FEFCF3;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
+}
+
+.filter-tab:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 2rpx 2rpx 0rpx #1A1A1A;
 }
 
 .filter-tab.active {
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
+  font-weight: bold;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 /* 视图切换 */
 .view-toggle {
   display: flex;
-  padding: 16rpx 20rpx;
+  padding: 16rpx 24rpx;
   background-color: #ffffff;
+  border: 4rpx solid #1A1A1A;
 }
 
 .toggle-btn {
   padding: 10rpx 30rpx;
   font-size: 26rpx;
-  color: #999999;
+  color: #1A1A1A;
+  border-radius: 16rpx;
 }
 
 .toggle-btn.active {
-  color: #4A90D9;
+  color: #1A1A1A;
   font-weight: bold;
+  background-color: #C8FF00;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
 }
 
 /* 番剧容器 */
 .anime-container {
   flex: 1;
-  padding: 20rpx;
+  padding: 20rpx 24rpx;
 }
 
 /* 网格视图 */
@@ -90,7 +119,8 @@
   background-color: #ffffff;
   border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .grid-cover {
@@ -106,7 +136,7 @@
   display: block;
   font-size: 28rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
   margin-bottom: 8rpx;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -116,19 +146,27 @@
 .grid-meta {
   display: block;
   font-size: 22rpx;
-  color: #999999;
+  color: #1A1A1A;
 }
 
 .grid-subscribe {
   padding: 12rpx;
   text-align: center;
   font-size: 24rpx;
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
+  font-weight: bold;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
+}
+
+.grid-subscribe:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
 }
 
 .grid-subscribe.subscribed {
-  background-color: #67C23A;
+  background-color: #C8FF00;
 }
 
 /* 列表视图 */
@@ -143,7 +181,8 @@
   background-color: #ffffff;
   border-radius: 16rpx;
   padding: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .list-cover {
@@ -151,6 +190,7 @@
   height: 180rpx;
   border-radius: 12rpx;
   flex-shrink: 0;
+  border: 4rpx solid #1A1A1A;
 }
 
 .list-info {
@@ -163,12 +203,12 @@
 .list-name {
   font-size: 30rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
 }
 
 .list-name-jp {
   font-size: 24rpx;
-  color: #999999;
+  color: #1A1A1A;
   margin-top: 6rpx;
 }
 
@@ -179,16 +219,18 @@
 }
 
 .list-platform {
-  background-color: #E8F4FD;
-  color: #4A90D9;
+  background-color: #C8FF00;
+  color: #1A1A1A;
   font-size: 22rpx;
   padding: 4rpx 12rpx;
-  border-radius: 4rpx;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  font-weight: bold;
 }
 
 .list-time {
   font-size: 24rpx;
-  color: #666666;
+  color: #1A1A1A;
 }
 
 .list-genres {
@@ -199,11 +241,12 @@
 }
 
 .genre-tag {
-  background-color: #f0f0f0;
-  color: #666666;
+  background-color: #E8E4D8;
+  color: #1A1A1A;
   font-size: 20rpx;
   padding: 4rpx 12rpx;
-  border-radius: 4rpx;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
 }
 
 .list-subscribe {
@@ -211,16 +254,24 @@
   height: 60rpx;
   line-height: 60rpx;
   text-align: center;
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
   font-size: 24rpx;
-  border-radius: 30rpx;
+  font-weight: bold;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
   align-self: center;
   flex-shrink: 0;
 }
 
+.list-subscribe:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
+}
+
 .list-subscribe.subscribed {
-  background-color: #67C23A;
+  background-color: #C8FF00;
 }
 
 /* 空状态 */
@@ -239,5 +290,5 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: #999999;
+  color: #1A1A1A;
 }

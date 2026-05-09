@@ -1,14 +1,14 @@
 .container {
   min-height: 100vh;
-  background-color: #F7F8FA;
+  background-color: transparent;
 }
 
-/* 搜索栏 */
+/* ==================== 搜索栏 ==================== */
 .search-bar {
   display: flex;
   align-items: center;
   padding: 16rpx 24rpx;
-  background-color: #ffffff;
+  background-color: #FEFCF3;
   gap: 16rpx;
 }
 
@@ -16,9 +16,11 @@
   flex: 1;
   display: flex;
   align-items: center;
-  background-color: #F5F5F5;
-  border-radius: 40rpx;
+  background-color: #FFFFFF;
+  border: 4rpx solid #1A1A1A;
+  border-radius: 16rpx;
   padding: 16rpx 24rpx;
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
 }
 
 .search-icon {
@@ -29,127 +31,163 @@
 .search-input {
   flex: 1;
   font-size: 28rpx;
-  color: #333333;
-}
-
-.search-input::placeholder {
-  color: #999999;
+  color: #1A1A1A;
 }
 
 .clear-btn {
-  font-size: 28rpx;
+  font-size: 24rpx;
   color: #999999;
   padding: 8rpx;
 }
 
 .search-cancel {
   font-size: 28rpx;
-  color: #4A90D9;
-  white-space: nowrap;
+  color: #1A1A1A;
+  font-weight: bold;
 }
 
 /* 搜索结果 */
 .search-results {
-  padding-top: 16rpx;
+  padding: 0 24rpx;
 }
 
-/* 星期标签 - 固定定位 */
+/* ==================== 星期标签 ==================== */
 .day-tabs-fixed {
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #ffffff;
+  background-color: #FEFCF3;
+  background-image: radial-gradient(circle, #D8D4C8 1rpx, transparent 1rpx);
+  background-size: 30rpx 30rpx;
 }
 
 .day-tabs {
   display: flex;
   justify-content: space-between;
-  background-color: #ffffff;
-  padding: 16rpx 10rpx;
-  border-bottom: 1rpx solid #eeeeee;
+  background-color: transparent;
+  padding: 16rpx 24rpx;
+  gap: 8rpx;
 }
 
 .day-tab {
   flex: 1;
   text-align: center;
   padding: 12rpx 0;
-  margin: 0 4rpx;
   border-radius: 12rpx;
   position: relative;
-  transition: all 0.3s;
+  transition: all 0.2s;
+  background-color: #FFFFFF;
+  border: 3rpx solid #1A1A1A;
+  box-shadow: 3rpx 3rpx 0rpx #1A1A1A;
 }
 
 .day-tab.active {
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
+  border: 3rpx solid #1A1A1A;
+  box-shadow: 3rpx 3rpx 0rpx #1A1A1A;
+  transform: translate(-1rpx, -1rpx);
 }
 
 .day-tab.today {
-  border: 2rpx solid #F56C6C;
+  border: 3rpx solid #FF6B9D;
 }
 
 .day-name {
   display: block;
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: bold;
+  color: #1A1A1A;
 }
 
 .day-date {
   display: block;
-  font-size: 22rpx;
-  margin-top: 6rpx;
-  opacity: 0.8;
+  font-size: 20rpx;
+  margin-top: 4rpx;
+  color: #666666;
 }
 
 .today-label {
-  display: block;
+  position: absolute;
+  top: -10rpx;
+  right: -6rpx;
   font-size: 18rpx;
-  color: #F56C6C;
-  margin-top: 4rpx;
+  background-color: #FF6B9D;
+  color: #FFFFFF;
+  padding: 2rpx 10rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #1A1A1A;
 }
 
 .update-badge {
   position: absolute;
-  top: -6rpx;
-  right: 4rpx;
-  background-color: #F56C6C;
-  color: #ffffff;
-  font-size: 18rpx;
-  padding: 2rpx 8rpx;
-  border-radius: 16rpx;
-  min-width: 28rpx;
+  top: -10rpx;
+  right: -6rpx;
+  font-size: 20rpx;
+  background-color: #C8FF00;
+  color: #1A1A1A;
+  padding: 2rpx 10rpx;
+  border-radius: 20rpx;
+  min-width: 32rpx;
+  border: 2rpx solid #1A1A1A;
+  font-weight: bold;
 }
 
-/* 番剧列表 */
+/* ==================== 番剧卡片 ==================== */
 .anime-list {
-  padding: 16rpx;
-  padding-bottom: 120rpx;
+  padding: 16rpx 24rpx 120rpx;
+  min-height: 60vh;
 }
 
-/* 瀑布流容器 */
 .waterfall-container {
   display: flex;
-  gap: 16rpx;
+  gap: 20rpx;
 }
 
 .waterfall-column {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 20rpx;
 }
 
 .anime-card {
   position: relative;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
+}
+
+.anime-card:active {
+  transform: translate(2rpx, 2rpx);
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
 }
 
 .anime-cover {
   width: 100%;
+  height: 100%;
   display: block;
+}
+
+/* 图片容器 */
+.cover-wrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 133.33%;
+  background-color: #E8E4D8;
+  overflow: hidden;
+  border-bottom: 3rpx solid #1A1A1A;
+}
+
+.cover-wrapper .anime-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* 信息区域 */
@@ -159,9 +197,9 @@
 
 .anime-name {
   display: block;
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -178,19 +216,18 @@
 }
 
 .episode-badge {
-  background-color: #4A90D9;
-  color: #ffffff;
-  font-size: 20rpx;
+  font-size: 22rpx;
+  color: #1A1A1A;
+  background-color: #C8FF00;
   padding: 4rpx 12rpx;
-  border-radius: 16rpx;
+  border-radius: 6rpx;
+  border: 2rpx solid #1A1A1A;
+  font-weight: bold;
 }
 
 .rating-badge {
-  background-color: #FFF7E6;
-  color: #E6A23C;
-  font-size: 20rpx;
-  padding: 4rpx 12rpx;
-  border-radius: 16rpx;
+  font-size: 22rpx;
+  color: #1A1A1A;
 }
 
 /* 订阅按钮 */
@@ -198,42 +235,47 @@
   position: absolute;
   top: 12rpx;
   right: 12rpx;
-  padding: 8rpx 16rpx;
-  background-color: rgba(74, 144, 217, 0.9);
-  border-radius: 24rpx;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
-  z-index: 10;
-}
-
-.subscribe-text {
+  background-color: #C8FF00;
+  color: #1A1A1A;
   font-size: 22rpx;
-  color: #ffffff;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  z-index: 10;
+  border: 3rpx solid #1A1A1A;
+  font-weight: bold;
+  box-shadow: 3rpx 3rpx 0rpx #1A1A1A;
 }
 
 .subscribe-float.subscribed {
-  background-color: rgba(103, 194, 58, 0.9);
+  background-color: #FFFFFF;
+  color: #1A1A1A;
 }
 
-/* 空状态 */
+.subscribe-text {
+  font-size: 20rpx;
+}
+
+/* ==================== 空状态 ==================== */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 100rpx 0;
+  padding: 120rpx 0;
 }
 
 .empty-icon {
-  font-size: 120rpx;
-  margin-bottom: 30rpx;
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
 }
 
 .empty-text {
   font-size: 28rpx;
-  color: #999999;
+  color: #1A1A1A;
+  font-weight: bold;
 }
 
-/* 底部提示 */
+/* ==================== 底部提示 ==================== */
 .bottom-tip {
   display: flex;
   align-items: center;
@@ -243,14 +285,15 @@
 }
 
 .bottom-line {
-  width: 60rpx;
-  height: 2rpx;
-  background-color: #E0E0E0;
+  width: 80rpx;
+  height: 4rpx;
+  background-color: #1A1A1A;
 }
 
 .bottom-text {
   font-size: 24rpx;
-  color: #CCCCCC;
+  color: #1A1A1A;
+  font-weight: bold;
 }
 
 /* 底部占位 */
@@ -258,24 +301,69 @@
   height: 120rpx;
 }
 
-/* 返回顶部按钮 */
+/* ==================== 返回顶部按钮 ==================== */
 .back-to-top {
   position: fixed;
-  right: 40rpx;
+  right: 30rpx;
   bottom: 120rpx;
-  width: 90rpx;
-  height: 90rpx;
-  background-color: #4A90D9;
+  width: 88rpx;
+  height: 88rpx;
+  background-color: #C8FF00;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4rpx 20rpx rgba(74, 144, 217, 0.4);
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 4rpx 4rpx 0rpx #1A1A1A;
   z-index: 200;
 }
 
 .back-icon {
-  color: #ffffff;
+  color: #1A1A1A;
   font-size: 40rpx;
   font-weight: bold;
+}
+
+/* ==================== Swiper ==================== */
+.day-swiper {
+  height: calc(100vh - 200rpx);
+}
+
+.day-scroll {
+  height: 100%;
+}
+
+/* 滑动切换动画 */
+.anime-list {
+  transition: none;
+}
+
+.anime-list.slide-in-left {
+  animation: slideInFromLeft 0.35s ease-out;
+}
+
+.anime-list.slide-in-right {
+  animation: slideInFromRight 0.35s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-20%);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(20%);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

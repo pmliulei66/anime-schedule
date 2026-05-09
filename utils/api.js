@@ -78,7 +78,7 @@ function transformItem(item) {
     name: item.name_cn || item.name || '',
     nameJp: item.name || '',
     nameEn: '',
-    cover: item.images ? (item.images.large || item.images.common) : '',
+    cover: item.images ? (item.images.common || item.images.medium || item.images.large) : '',
     platform: '日本放送',
     broadcastDay: item.air_weekday || 0,
     broadcastTime: '',
@@ -193,6 +193,15 @@ function fetchAnimeDetail(id) {
       // 详情页额外提取 tags
       if (data.tags) {
         result.genre = data.tags.slice(0, 6).map(tag => tag.name);
+      }
+      // 从 eps 数组中提取真实的最新集数和更新日期
+      if (data.eps && Array.isArray(data.eps) && data.eps.length > 0) {
+        const airedEps = data.eps.filter(ep => ep.status === 'Air' && ep.airdate && ep.airdate !== '0000-00-00');
+        if (airedEps.length > 0) {
+          const latestEp = airedEps.reduce((a, b) => (a.sort || 0) > (b.sort || 0) ? a : b);
+          result.currentEpisode = latestEp.sort;
+          result.latestUpdateDate = latestEp.airdate;
+        }
       }
       setCache(cacheKey, result);
       return result;

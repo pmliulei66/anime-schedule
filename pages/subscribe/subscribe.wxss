@@ -1,17 +1,19 @@
 .container {
   min-height: 100vh;
-  background-color: #F7F8FA;
+  background-color: #FEFCF3;
   padding-bottom: 40rpx;
 }
 
 /* 统计卡片 */
 .stats-card {
   display: flex;
-  background-color: #4A90D9;
-  border-radius: 20rpx;
-  padding: 40rpx 30rpx;
-  color: #ffffff;
-  margin: 20rpx 20rpx 16rpx;
+  background-color: #C8FF00;
+  border-radius: 16rpx;
+  padding: 40rpx 24rpx;
+  color: #1A1A1A;
+  margin: 20rpx 24rpx 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .stat-item {
@@ -33,18 +35,19 @@
 }
 
 .stat-divider {
-  width: 1rpx;
-  background-color: rgba(255, 255, 255, 0.3);
+  width: 4rpx;
+  background-color: rgba(26, 26, 26, 0.3);
   margin: 0 20rpx;
 }
 
 /* 推送通知卡片 */
 .notification-card {
   background-color: #ffffff;
-  border-radius: 20rpx;
+  border-radius: 16rpx;
   padding: 28rpx;
-  margin: 0 20rpx 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  margin: 0 24rpx 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .notification-header {
@@ -71,12 +74,12 @@
 .notification-title {
   font-size: 30rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
 }
 
 .notification-desc {
   font-size: 24rpx;
-  color: #999999;
+  color: #1A1A1A;
   margin-top: 4rpx;
 }
 
@@ -90,34 +93,36 @@
   margin-top: 16rpx;
   padding: 12rpx 16rpx;
   background-color: #FFF8E6;
-  border-radius: 8rpx;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
 }
 
 .auth-btn {
   margin-top: 16rpx;
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
   font-size: 28rpx;
   padding: 16rpx 0;
-  border-radius: 12rpx;
-  border: none;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 /* 瀑布流列表 - 与首页一致 */
 .anime-list {
-  padding: 0 16rpx;
+  padding: 0 24rpx;
 }
 
 .waterfall-container {
   display: flex;
-  gap: 16rpx;
+  gap: 20rpx;
 }
 
 .waterfall-column {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 20rpx;
 }
 
 .anime-card {
@@ -125,7 +130,8 @@
   background-color: #ffffff;
   border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .anime-cover {
@@ -141,7 +147,7 @@
   display: block;
   font-size: 28rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,10 +165,12 @@
 
 .episode-badge {
   font-size: 22rpx;
-  color: #67C23A;
-  background-color: #F0F9EB;
+  color: #1A1A1A;
+  background-color: #C8FF00;
   padding: 4rpx 12rpx;
   border-radius: 6rpx;
+  border: 2rpx solid #1A1A1A;
+  font-weight: bold;
 }
 
 .rating-badge {
@@ -172,7 +180,7 @@
 
 .card-day {
   font-size: 22rpx;
-  color: #999999;
+  color: #1A1A1A;
   margin-top: 8rpx;
 }
 
@@ -183,14 +191,15 @@
   right: 12rpx;
   width: 48rpx;
   height: 48rpx;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
+  background-color: #FF6B9D;
+  border-radius: 16rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: #1A1A1A;
   font-size: 24rpx;
   z-index: 10;
+  border: 4rpx solid #1A1A1A;
 }
 
 /* 空状态 */
@@ -210,21 +219,22 @@
 .empty-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
   margin-bottom: 16rpx;
 }
 
 .empty-desc {
   font-size: 26rpx;
-  color: #999999;
+  color: #1A1A1A;
   margin-bottom: 40rpx;
 }
 
 .empty-btn {
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
   font-size: 28rpx;
   padding: 20rpx 60rpx;
-  border-radius: 40rpx;
-  border: none;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }

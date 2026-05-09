@@ -167,6 +167,14 @@ function transformAniListItem(media) {
   };
 }
 
+// 格式化日期为 YYYY-MM-DD
+function formatDate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 // 清理描述文本（移除 HTML 标签）
 function cleanDescription(desc) {
   if (!desc) return '';
@@ -213,7 +221,14 @@ function fetchAnimeDetail(id) {
   return graphqlRequest(ANIME_DETAIL_QUERY, { id: parseInt(id) })
     .then(data => {
       if (data.Media) {
-        return transformAniListItem(data.Media);
+        const result = transformAniListItem(data.Media);
+        // 从 nextAiringEpisode 推算最近更新日期
+        if (result.nextAiringEpisode && result.nextAiringEpisode.airingAt) {
+          const nextAirTime = result.nextAiringEpisode.airingAt * 1000;
+          const latestUpdateTime = new Date(nextAirTime - 7 * 24 * 60 * 60 * 1000);
+          result.latestUpdateDate = formatDate(latestUpdateTime);
+        }
+        return result;
       }
       return null;
     });

@@ -1,6 +1,6 @@
 .container {
   min-height: 100vh;
-  background-color: #F7F8FA;
+  background-color: #FEFCF3;
 }
 
 /* 封面区域：全宽按比例展示 */
@@ -30,7 +30,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 60rpx 32rpx 32rpx;
+  padding: 60rpx 24rpx 24rpx;
   background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 60%, transparent 100%);
 }
 
@@ -43,7 +43,7 @@
   font-size: 40rpx;
   font-weight: bold;
   line-height: 1.3;
-  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.5);
+  text-shadow: 4rpx 4rpx 0rpx rgba(0,0,0,0.5);
 }
 
 .anime-title-jp {
@@ -63,12 +63,13 @@
 .status-tag {
   font-size: 22rpx;
   padding: 6rpx 16rpx;
-  border-radius: 6rpx;
-  color: #ffffff;
+  border-radius: 16rpx;
+  color: #1A1A1A;
+  border: 4rpx solid #1A1A1A;
 }
 
-.status-tag.airing { background-color: #67C23A; }
-.status-tag.finished { background-color: #909399; }
+.status-tag.airing { background-color: #C8FF00; }
+.status-tag.finished { background-color: #909399; color: #ffffff; }
 .status-tag.upcoming { background-color: #E6A23C; }
 
 .meta-text {
@@ -80,9 +81,10 @@
 .quick-info-card {
   display: flex;
   justify-content: space-around;
-  padding: 28rpx 20rpx;
+  padding: 28rpx 24rpx;
   background-color: #ffffff;
-  border-bottom: 1rpx solid #f0f0f0;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .info-item {
@@ -98,19 +100,20 @@
 
 .info-label {
   font-size: 22rpx;
-  color: #999999;
+  color: #1A1A1A;
 }
 
 .info-value {
   font-size: 26rpx;
-  color: #333333;
+  color: #1A1A1A;
   font-weight: 500;
 }
 
 /* 标签区域 */
 .tags-section {
-  padding: 20rpx 32rpx;
+  padding: 20rpx 24rpx;
   background-color: #ffffff;
+  border: 4rpx solid #1A1A1A;
 }
 
 .tags-scroll {
@@ -121,19 +124,21 @@
 
 .genre-tag {
   font-size: 24rpx;
-  color: #666666;
-  background-color: #f5f5f5;
+  color: #1A1A1A;
+  background-color: #E8E4D8;
   padding: 10rpx 20rpx;
-  border-radius: 20rpx;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
 }
 
 /* 操作按钮 */
 .action-bar {
   display: flex;
   gap: 20rpx;
-  padding: 24rpx 32rpx;
+  padding: 24rpx 24rpx;
   background-color: #ffffff;
   margin-bottom: 16rpx;
+  border: 4rpx solid #1A1A1A;
 }
 
 .action-btn {
@@ -144,12 +149,14 @@
   gap: 12rpx;
   height: 88rpx;
   border-radius: 16rpx;
-  background-color: #4A90D9;
-  color: #ffffff;
+  background-color: #C8FF00;
+  color: #1A1A1A;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .action-btn.subscribed {
-  background-color: #67C23A;
+  background-color: #C8FF00;
 }
 
 .btn-icon {
@@ -166,14 +173,15 @@
   margin: 16rpx 24rpx;
   padding: 28rpx;
   background-color: #ffffff;
-  border-radius: 20rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .section-title {
   font-size: 30rpx;
   font-weight: bold;
-  color: #333333;
+  color: #1A1A1A;
   margin-bottom: 16rpx;
   display: block;
 }
@@ -181,7 +189,7 @@
 /* 简介 */
 .intro-text {
   font-size: 28rpx;
-  color: #666666;
+  color: #1A1A1A;
   line-height: 1.8;
 }
 

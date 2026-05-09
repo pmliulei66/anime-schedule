@@ -9,14 +9,17 @@
   <!-- 主内容 -->
   <block wx:if="{{!loading}}">
   <view class="content-fade-in">
+  <!-- 搜索栏 -->
   <view class="search-bar">
     <view class="search-input-wrap">
       <text class="search-icon">🔍</text>
       <input 
         class="search-input" 
-        placeholder="搜索番剧名称..." 
+        type="text" 
+        placeholder="搜索番剧..." 
         value="{{searchKeyword}}"
         bindinput="onSearchInput"
+        bindfocus="onSearchFocus"
         bindconfirm="doSearch"
         confirm-type="search"
       />
@@ -32,51 +35,53 @@
       <view class="loading-spinner"></view>
       <text class="loading-text">加载中哦喵~</text>
     </view>
-    <view wx:elif="{{searchResults.length > 0}}" class="anime-list">
-      <view class="waterfall-container">
-        <view class="waterfall-column">
-          <view 
-            wx:for="{{searchLeftColumn}}"
-            wx:key="id"
-            class="anime-card"
-            bindtap="goToDetail"
-            data-id="{{item.id}}">
-            <image class="anime-cover" src="{{item.cover}}" mode="widthFix"></image>
-            <view class="card-info">
-              <text class="anime-name">{{item.name}}</text>
-              <view class="card-meta">
-                <view class="episode-badge">第{{item.currentEpisode}}集</view>
-                <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
-              </view>
-            </view>
-            <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
-              <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
+    <view wx:elif="{{searchResults.length > 0}}" class="waterfall-container">
+      <view class="waterfall-column">
+        <view 
+          wx:for="{{searchLeftColumn}}"
+          wx:key="id"
+          class="anime-card"
+          bindtap="goToDetail"
+          data-id="{{item.id}}">
+          <view class="cover-wrapper">
+            <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load></image>
+          </view>
+          <view class="card-info">
+            <text class="anime-name">{{item.name}}</text>
+            <view class="card-meta">
+              <view class="episode-badge">第{{item.currentEpisode}}集</view>
+              <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
             </view>
           </view>
+          <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
+            <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
+          </view>
         </view>
-        <view class="waterfall-column">
-          <view 
-            wx:for="{{searchRightColumn}}"
-            wx:key="id"
-            class="anime-card"
-            bindtap="goToDetail"
-            data-id="{{item.id}}">
-            <image class="anime-cover" src="{{item.cover}}" mode="widthFix"></image>
-            <view class="card-info">
-              <text class="anime-name">{{item.name}}</text>
-              <view class="card-meta">
-                <view class="episode-badge">第{{item.currentEpisode}}集</view>
-                <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
-              </view>
+      </view>
+      <view class="waterfall-column">
+        <view 
+          wx:for="{{searchRightColumn}}"
+          wx:key="id"
+          class="anime-card"
+          bindtap="goToDetail"
+          data-id="{{item.id}}">
+          <view class="cover-wrapper">
+            <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load></image>
+          </view>
+          <view class="card-info">
+            <text class="anime-name">{{item.name}}</text>
+            <view class="card-meta">
+              <view class="episode-badge">第{{item.currentEpisode}}集</view>
+              <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
             </view>
-            <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
-              <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
-            </view>
+          </view>
+          <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
+            <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
           </view>
         </view>
       </view>
     </view>
-    <view wx:elif="{{searchKeyword && !searchLoading}}" class="empty-state">
+    <view wx:else class="empty-state">
       <text class="empty-icon">🔍</text>
       <text class="empty-text">未找到相关番剧</text>
     </view>
@@ -101,64 +106,87 @@
       </view>
     </view>
 
-    <!-- 番剧列表 - 瀑布流布局 -->
-    <view class="anime-list">
-      <view class="waterfall-container">
-        <view class="waterfall-column">
-          <view 
-            wx:for="{{leftColumn}}"
-            wx:key="id"
-            class="anime-card"
-            bindtap="goToDetail"
-            data-id="{{item.id}}">
-            <image class="anime-cover" src="{{item.cover}}" mode="widthFix"></image>
-            <view class="card-info">
-              <text class="anime-name">{{item.name}}</text>
-              <view class="card-meta">
-                <view class="episode-badge">第{{item.currentEpisode}}集</view>
-                <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
+    <!-- Swiper 滑动切换 -->
+    <swiper 
+      class="day-swiper"
+      current="{{selectedDay}}"
+      bindchange="onSwiperChange"
+      duration="300"
+      skip-hidden-item-layout>
+      <swiper-item wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="index">
+        <scroll-view 
+          scroll-y 
+          enhanced
+          bounces="{{false}}"
+          show-scrollbar="{{false}}"
+          class="day-scroll"
+          bindscroll="onScroll"
+          scroll-top="{{scrollPositions[index]}}"
+          scroll-with-animation="{{scrollWithAnimation}}">
+          <view class="anime-list">
+            <view class="waterfall-container">
+              <view class="waterfall-column">
+                <view 
+                  wx:for="{{dayColumns[index].left}}"
+                  wx:key="id"
+                  class="anime-card"
+                  bindtap="goToDetail"
+                  data-id="{{item.id}}">
+                  <view class="cover-wrapper">
+                    <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
+                  </view>
+                  <view class="card-info">
+                    <text class="anime-name">{{item.name}}</text>
+                    <view class="card-meta">
+                      <view class="episode-badge">第{{item.currentEpisode}}集</view>
+                      <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
+                    </view>
+                  </view>
+                  <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
+                    <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
+                  </view>
+                </view>
+              </view>
+              <view class="waterfall-column">
+                <view 
+                  wx:for="{{dayColumns[index].right}}"
+                  wx:key="id"
+                  class="anime-card"
+                  bindtap="goToDetail"
+                  data-id="{{item.id}}">
+                  <view class="cover-wrapper">
+                    <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
+                  </view>
+                  <view class="card-info">
+                    <text class="anime-name">{{item.name}}</text>
+                    <view class="card-meta">
+                      <view class="episode-badge">第{{item.currentEpisode}}集</view>
+                      <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
+                    </view>
+                  </view>
+                  <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
+                    <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
+                  </view>
+                </view>
               </view>
             </view>
-            <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
-              <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
-            </view>
-          </view>
-        </view>
-        <view class="waterfall-column">
-          <view 
-            wx:for="{{rightColumn}}"
-            wx:key="id"
-            class="anime-card"
-            bindtap="goToDetail"
-            data-id="{{item.id}}">
-            <image class="anime-cover" src="{{item.cover}}" mode="widthFix"></image>
-            <view class="card-info">
-              <text class="anime-name">{{item.name}}</text>
-              <view class="card-meta">
-                <view class="episode-badge">第{{item.currentEpisode}}集</view>
-                <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
-              </view>
-            </view>
-            <view class="subscribe-float {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
-              <text class="subscribe-text">{{item.isSubscribed ? '已订阅' : '订阅'}}</text>
-            </view>
-          </view>
-        </view>
-      </view>
 
-      <view wx:if="{{currentDayAnime.length === 0}}" class="empty-state">
-        <text class="empty-icon">📅</text>
-        <text class="empty-text">今日无更新</text>
-      </view>
-      
-      <view wx:if="{{currentDayAnime.length > 0}}" class="bottom-tip">
-        <text class="bottom-line"></text>
-        <text class="bottom-text">已经到底啦喵~</text>
-        <text class="bottom-line"></text>
-      </view>
-      
-      <view class="bottom-placeholder"></view>
-    </view>
+            <view wx:if="{{dayAnimeList[index].length === 0}}" class="empty-state">
+              <text class="empty-icon">📅</text>
+              <text class="empty-text">今日无更新</text>
+            </view>
+            
+            <view wx:if="{{dayAnimeList[index].length > 0}}" class="bottom-tip">
+              <text class="bottom-line"></text>
+              <text class="bottom-text">已经到底啦喵~</text>
+              <text class="bottom-line"></text>
+            </view>
+            
+            <view class="bottom-placeholder"></view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+    </swiper>
   </view>
   </view>
   </block>

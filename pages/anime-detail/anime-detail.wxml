@@ -39,10 +39,20 @@
       <text class="info-label">播出</text>
       <text class="info-value">{{anime.broadcastDayText}}</text>
     </view>
-    <view class="info-item" wx:if="{{anime.totalEpisodes}}">
+    <view class="info-item" wx:if="{{anime.currentEpisode && anime.status === 'airing'}}">
       <text class="info-icon">📺</text>
-      <text class="info-label">集数</text>
+      <text class="info-label">更新至</text>
+      <text class="info-value">第{{anime.currentEpisode}}集</text>
+    </view>
+    <view class="info-item" wx:if="{{anime.totalEpisodes}}">
+      <text class="info-icon">🎞️</text>
+      <text class="info-label">全</text>
       <text class="info-value">共{{anime.totalEpisodes}}集</text>
+    </view>
+    <view class="info-item" wx:if="{{anime.latestUpdateDate}}">
+      <text class="info-icon">🕐</text>
+      <text class="info-label">最近更新</text>
+      <text class="info-value">{{anime.latestUpdateDate}}</text>
     </view>
     <view class="info-item" wx:if="{{anime.startDate}}">
       <text class="info-icon">🎬</text>
