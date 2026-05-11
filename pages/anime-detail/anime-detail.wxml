@@ -33,7 +33,7 @@
   </view>
 
   <!-- 快捷信息卡片 -->
-  <view class="quick-info-card">
+  <view class="module-card quick-info-card">
     <view class="info-item" wx:if="{{anime.broadcastDayText}}">
       <text class="info-icon">📅</text>
       <text class="info-label">播出</text>
@@ -62,14 +62,14 @@
   </view>
 
   <!-- 标签 -->
-  <view class="tags-section" wx:if="{{anime.genre.length > 0}}">
+  <view class="module-card tags-section" wx:if="{{anime.genre.length > 0}}">
     <view class="tags-scroll">
       <text wx:for="{{anime.genre}}" wx:for-item="tag" wx:key="index" class="genre-tag">{{tag}}</text>
     </view>
   </view>
 
   <!-- 操作按钮 -->
-  <view class="action-bar">
+  <view class="module-card action-bar">
     <view class="action-btn {{isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe">
       <text class="btn-icon">{{isSubscribed ? '✓' : '+'}}</text>
       <text class="btn-text">{{isSubscribed ? '已订阅' : '订阅'}}</text>

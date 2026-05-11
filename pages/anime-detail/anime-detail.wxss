@@ -1,13 +1,19 @@
 .container {
   min-height: 100vh;
   background-color: #FEFCF3;
+  background-image: radial-gradient(circle, #D8D4C8 1rpx, transparent 1rpx);
+  background-size: 30rpx 30rpx;
 }
 
-/* 封面区域：全宽按比例展示 */
+/* 封面区域 */
 .cover-wrapper {
   position: relative;
-  width: 100%;
+  margin: 0 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
   background-color: #1a1a1a;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .cover-image {
@@ -77,14 +83,20 @@
   color: rgba(255,255,255,0.9);
 }
 
+/* 通用模块卡片样式 - 统一宽度 */
+.module-card {
+  margin: 16rpx 24rpx 0;
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  border: 4rpx solid #1A1A1A;
+  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
+}
+
 /* 快捷信息卡片 */
 .quick-info-card {
   display: flex;
   justify-content: space-around;
   padding: 28rpx 24rpx;
-  background-color: #ffffff;
-  border: 4rpx solid #1A1A1A;
-  box-shadow: 6rpx 6rpx 0rpx #1A1A1A;
 }
 
 .info-item {
@@ -112,8 +124,6 @@
 /* 标签区域 */
 .tags-section {
   padding: 20rpx 24rpx;
-  background-color: #ffffff;
-  border: 4rpx solid #1A1A1A;
 }
 
 .tags-scroll {
@@ -135,10 +145,7 @@
 .action-bar {
   display: flex;
   gap: 20rpx;
-  padding: 24rpx 24rpx;
-  background-color: #ffffff;
-  margin-bottom: 16rpx;
-  border: 4rpx solid #1A1A1A;
+  padding: 24rpx;
 }
 
 .action-btn {
@@ -168,9 +175,9 @@
   font-weight: 500;
 }
 
-/* 通用卡片区块 */
+/* 简介卡片 */
 .section-card {
-  margin: 16rpx 24rpx;
+  margin: 16rpx 24rpx 0;
   padding: 28rpx;
   background-color: #ffffff;
   border-radius: 16rpx;

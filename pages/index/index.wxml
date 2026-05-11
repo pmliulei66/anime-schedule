@@ -88,7 +88,7 @@
   </view>
 
   <!-- 正常列表（非搜索模式） -->
-  <view wx:if="{{!isSearching}}">
+  <view wx:if="{{!isSearching}}" class="main-content">
     <!-- 星期标签（固定） -->
     <view class="day-tabs-fixed">
       <view class="day-tabs">
@@ -114,7 +114,7 @@
       bindchange="onSwiperChange"
       duration="300"
       skip-hidden-item-layout>
-      <swiper-item wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="index">
+      <swiper-item wx:for="{{[0,1,2,3,4,5,6]}}" wx:key="*this">
         <scroll-view 
           scroll-y 
           enhanced
@@ -122,9 +122,10 @@
           show-scrollbar="{{false}}"
           class="day-scroll"
           bindscroll="onScroll"
-          scroll-top="{{scrollPositions[index]}}"
-          scroll-with-animation="{{scrollWithAnimation}}">
+          scroll-into-view="{{scrollToTop ? 'scroll-anchor' : ''}}"
+          scroll-with-animation>
           <view class="anime-list">
+            <view id="scroll-anchor"></view>
             <view class="waterfall-container">
               <view class="waterfall-column">
                 <view 
@@ -134,10 +135,11 @@
                   bindtap="goToDetail"
                   data-id="{{item.id}}">
                   <view class="cover-wrapper">
-                    <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
+                    <image class="anime-cover {{item.useHighRes ? 'cover-loaded' : ''}}" src="{{item.useHighRes ? item.cover : (item.coverLow || item.cover)}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
                   </view>
                   <view class="card-info">
                     <text class="anime-name">{{item.name}}</text>
+                    <text class="anime-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
                     <view class="card-meta">
                       <view class="episode-badge">第{{item.currentEpisode}}集</view>
                       <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
@@ -156,10 +158,11 @@
                   bindtap="goToDetail"
                   data-id="{{item.id}}">
                   <view class="cover-wrapper">
-                    <image class="anime-cover" src="{{item.cover}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
+                    <image class="anime-cover {{item.useHighRes ? 'cover-loaded' : ''}}" src="{{item.useHighRes ? item.cover : (item.coverLow || item.cover)}}" mode="aspectFill" lazy-load binderror="onImageError" data-id="{{item.id}}"></image>
                   </view>
                   <view class="card-info">
                     <text class="anime-name">{{item.name}}</text>
+                    <text class="anime-name-en" wx:if="{{item.nameEn}}">{{item.nameEn}}</text>
                     <view class="card-meta">
                       <view class="episode-badge">第{{item.currentEpisode}}集</view>
                       <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>

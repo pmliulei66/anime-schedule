@@ -66,9 +66,6 @@
             </view>
             <view class="card-day" wx:if="{{item.broadcastDayText}}">{{item.broadcastDayText}}</view>
           </view>
-          <view class="unsubscribe-float" catchtap="unsubscribe" data-id="{{item.id}}">
-            <text>✕</text>
-          </view>
         </view>
       </view>
       <!-- 右列 -->
@@ -87,9 +84,6 @@
               <view class="rating-badge" wx:if="{{item.rating}}">⭐ {{item.rating}}</view>
             </view>
             <view class="card-day" wx:if="{{item.broadcastDayText}}">{{item.broadcastDayText}}</view>
-          </view>
-          <view class="unsubscribe-float" catchtap="unsubscribe" data-id="{{item.id}}">
-            <text>✕</text>
           </view>
         </view>
       </view>

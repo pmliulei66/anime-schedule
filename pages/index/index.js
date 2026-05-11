@@ -1,5 +1,6 @@
 // pages/index/index.js
 const animeData = require('../../utils/animeData.js');
+const anilist = require('../../utils/anilist.js');
 
 Page({
   data: {
@@ -23,6 +24,7 @@ Page({
     calendarData: [],
     loading: true,
     showBackTop: false,
+    scrollToTop: false,
     // 搜索相关
     searchKeyword: '',
     isSearching: false,
@@ -30,7 +32,6 @@ Page({
     searchResults: [],
     searchLeftColumn: [],
     searchRightColumn: [],
-    scrollWithAnimation: false,
     pressingDay: -1
   },
 
@@ -90,7 +91,12 @@ Page({
     // 缓存有效期：30分钟
     const CACHE_VALID_TIME = 30 * 60 * 1000;
     
-    if (cachedData && cacheTime && (now - cacheTime) < CACHE_VALID_TIME) {
+    // 检查缓存数据是否包含 coverLow 字段（版本兼容）
+    const hasCoverLow = cachedData && cachedData.length > 0 && 
+      cachedData[0].items && cachedData[0].items[0] && 
+      cachedData[0].items[0].images;
+    
+    if (cachedData && cacheTime && (now - cacheTime) < CACHE_VALID_TIME && hasCoverLow) {
       console.log('使用缓存数据');
       this.processCalendarData(cachedData);
     } else {
@@ -163,6 +169,139 @@ Page({
       dayColumns: dayColumns,
       loading: false
     });
+
+    // 延迟预加载高质量图片
+    this.preloadHighQualityImages(dayAnimeList);
+
+    // 补充没有中文译名的番剧信息
+    this.supplementMissingNames(dayAnimeList);
+  },
+
+  // 从 AniList 补充缺少中文译名的番剧
+  supplementMissingNames(dayAnimeList) {
+    const missingList = [];
+    dayAnimeList.forEach(dayAnime => {
+      dayAnime.forEach(anime => {
+        // 检测是否缺少中文译名（name 和 nameJp 相同说明没有中文翻译）
+        if (anime.name === anime.nameJp || !anime.name) {
+          missingList.push({
+            id: anime.id,
+            nameJp: anime.nameJp
+          });
+        }
+      });
+    });
+
+    if (missingList.length === 0) return;
+
+    // 逐个从 AniList 搜索补充（控制并发）
+    const supplementMap = {};
+    let index = 0;
+
+    const searchNext = () => {
+      if (index >= missingList.length) {
+        // 全部搜索完毕，应用更新
+        this.applySupplementNames(supplementMap);
+        return;
+      }
+
+      const item = missingList[index++];
+      anilist.searchAnime(item.nameJp, 1, 1).then(results => {
+        if (results.length > 0) {
+          const found = results[0];
+          // 优先用英文名，其次罗马音
+          const supplementName = found.nameEn || found.name || '';
+          if (supplementName && supplementName !== item.nameJp) {
+            supplementMap[item.id] = supplementName;
+          }
+        }
+        // 间隔 300ms 避免请求过快
+        setTimeout(searchNext, 300);
+      }).catch(() => {
+        setTimeout(searchNext, 300);
+      });
+    };
+
+    // 延迟 2 秒后开始，不影响首屏加载
+    setTimeout(searchNext, 2000);
+  },
+
+  // 应用 AniList 补充的名称
+  applySupplementNames(supplementMap) {
+    if (Object.keys(supplementMap).length === 0) return;
+
+    const dayColumns = this.data.dayColumns.map(day => ({
+      left: day.left.map(anime => ({
+        ...anime,
+        nameEn: supplementMap[anime.id] || anime.nameEn || ''
+      })),
+      right: day.right.map(anime => ({
+        ...anime,
+        nameEn: supplementMap[anime.id] || anime.nameEn || ''
+      }))
+    }));
+
+    this.setData({ dayColumns });
+  },
+
+  // 渐进式图片加载：先显示低质量图，预加载高质量图后无缝替换
+  preloadHighQualityImages(dayAnimeList) {
+    // 收集所有需要替换的图片
+    const preloadList = [];
+    dayAnimeList.forEach(dayAnime => {
+      dayAnime.forEach(anime => {
+        if (anime.coverLow && anime.cover && anime.coverLow !== anime.cover) {
+          preloadList.push({
+            id: anime.id,
+            lowRes: anime.coverLow,
+            highRes: anime.cover
+          });
+        }
+      });
+    });
+
+    if (preloadList.length === 0) return;
+
+    // 延迟 1 秒后开始预加载，等页面稳定
+    setTimeout(() => {
+      let loadedCount = 0;
+      const updateMap = {};
+
+      preloadList.forEach(item => {
+        wx.getImageInfo({
+          src: item.highRes,
+          success: () => {
+            updateMap[item.id] = true;
+            loadedCount++;
+            // 每加载完 5 张批量更新一次，减少 setData 频率
+            if (loadedCount % 5 === 0 || loadedCount === preloadList.length) {
+              this.applyHighQualityImages(updateMap);
+            }
+          },
+          fail: () => {
+            loadedCount++;
+          }
+        });
+      });
+    }, 1000);
+  },
+
+  // 将高质量图片应用到视图
+  applyHighQualityImages(updateMap) {
+    if (Object.keys(updateMap).length === 0) return;
+
+    const dayColumns = this.data.dayColumns.map(day => ({
+      left: day.left.map(anime => ({
+        ...anime,
+        useHighRes: updateMap[anime.id] ? true : (anime.useHighRes || false)
+      })),
+      right: day.right.map(anime => ({
+        ...anime,
+        useHighRes: updateMap[anime.id] ? true : (anime.useHighRes || false)
+      }))
+    }));
+
+    this.setData({ dayColumns });
   },
 
   // 从 Bangumi API 加载番剧数据
@@ -206,33 +345,27 @@ Page({
     this.setData({ pressingDay: -1 });
   },
 
-  // 滚动监听 - 每个 scroll-view 独立
+  // 滚动监听 - 只控制返回顶部按钮，不回写 scrollPositions
   onScroll(e) {
     const scrollTop = e.detail.scrollTop;
-    const index = this.data.selectedDay;
-    const positions = this.data.scrollPositions;
-    positions[index] = scrollTop;
-    
-    this.setData({ 
-      scrollPositions: positions,
-      showBackTop: scrollTop > 300
-    });
+    // 用实例变量记录滚动位置，避免 setData 触发重渲染
+    this._scrollTop = scrollTop;
+    // 节流控制 showBackTop
+    if (scrollTop > 300 !== this.data.showBackTop) {
+      this.setData({ showBackTop: scrollTop > 300 });
+    }
   },
 
   // 返回顶部
   goToTop() {
-    const index = this.data.selectedDay;
-    const positions = this.data.scrollPositions;
-    positions[index] = 0;
     this.setData({ 
-      scrollPositions: positions,
       showBackTop: false,
-      scrollWithAnimation: true
+      scrollToTop: true
     });
-    // 重置动画标志
+    // 重置标志
     setTimeout(() => {
-      this.setData({ scrollWithAnimation: false });
-    }, 300);
+      this.setData({ scrollToTop: false });
+    }, 100);
   },
 
   // 切换上一周
