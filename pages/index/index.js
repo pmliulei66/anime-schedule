@@ -30,7 +30,8 @@ Page({
     searchResults: [],
     searchLeftColumn: [],
     searchRightColumn: [],
-    scrollWithAnimation: false
+    scrollWithAnimation: false,
+    pressingDay: -1
   },
 
   onLoad() {
@@ -192,6 +193,17 @@ Page({
   selectDay(e) {
     const index = parseInt(e.currentTarget.dataset.index);
     this.setData({ selectedDay: index });
+  },
+
+  // 星期标签触摸开始
+  onDayTouchStart(e) {
+    const index = parseInt(e.currentTarget.dataset.index);
+    this.setData({ pressingDay: index });
+  },
+
+  // 星期标签触摸结束
+  onDayTouchEnd(e) {
+    this.setData({ pressingDay: -1 });
   },
 
   // 滚动监听 - 每个 scroll-view 独立

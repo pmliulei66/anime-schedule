@@ -95,13 +95,14 @@
         <view 
           wx:for="{{weekDays}}" 
           wx:key="index"
-          class="day-tab {{selectedDay == index ? 'active' : ''}} {{todayIndex == index ? 'today' : ''}}"
+          class="day-tab {{selectedDay == index ? 'active' : ''}} {{todayIndex == index ? 'today' : ''}} {{pressingDay == index ? 'pressing' : ''}}"
           bindtap="selectDay"
+          bindtouchstart="onDayTouchStart"
+          bindtouchend="onDayTouchEnd"
           data-index="{{index}}">
+          <view class="update-badge" wx:if="{{item.count > 0}}">{{item.count}}</view>
           <text class="day-name">{{item.name}}</text>
           <text class="day-date">{{item.date}}</text>
-          <text class="today-label" wx:if="{{todayIndex == index}}">今天</text>
-          <view class="update-badge" wx:if="{{item.count > 0}}">{{item.count}}</view>
         </view>
       </view>
     </view>
