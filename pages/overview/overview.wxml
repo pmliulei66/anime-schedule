@@ -49,7 +49,7 @@
           <text class="grid-name">{{item.name}}</text>
           <text class="grid-meta">{{item.platform}} · {{item.broadcastDayText}} {{item.broadcastTime}}</text>
         </view>
-        <view class="grid-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" bindtap="toggleSubscribe">
+        <view class="grid-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
           {{item.isSubscribed ? '已订阅' : '订阅'}}
         </view>
       </view>
@@ -75,7 +75,7 @@
             <text wx:for="{{item.genre}}" wx:for-item="tag" wx:key="index" class="genre-tag">{{tag}}</text>
           </view>
         </view>
-        <view class="list-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" bindtap="toggleSubscribe">
+        <view class="list-subscribe {{item.isSubscribed ? 'subscribed' : ''}}" catchtap="toggleSubscribe" data-id="{{item.id}}">
           {{item.isSubscribed ? '已订阅' : '订阅'}}
         </view>
       </view>

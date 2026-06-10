@@ -1,7 +1,14 @@
 {
   "description": "新番更新时间表小程序",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "cloud/functions/checkAnimeUpdate/node_modules" },
+      { "type": "folder", "value": "cloud/functions/sendSubscribeMessage/node_modules" },
+      { "type": "file", "value": "CHANGELOG.md" },
+      { "type": "file", "value": "README.md" },
+      { "type": "file", "value": "SPEC.md" },
+      { "type": "file", "value": ".gitignore" }
+    ],
     "include": []
   },
   "setting": {

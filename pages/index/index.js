@@ -1,6 +1,7 @@
 // pages/index/index.js
 const animeData = require('../../utils/animeData.js');
 const anilist = require('../../utils/anilist.js');
+const userSync = require('../../utils/userSync.js');
 
 Page({
   data: {
@@ -97,7 +98,7 @@ Page({
     // 检查缓存数据是否包含 coverLow 字段（版本兼容）
     const hasCoverLow = cachedData && cachedData.length > 0 && 
       cachedData[0].items && cachedData[0].items[0] && 
-      cachedData[0].items[0].images;
+      (cachedData[0].items[0].coverLow || cachedData[0].items[0].cover);
     
     if (cachedData && cacheTime && (now - cacheTime) < CACHE_VALID_TIME && hasCoverLow) {
       console.log('使用缓存数据');
@@ -405,6 +406,7 @@ Page({
 
     wx.setStorageSync('subscribedIds', subscribedIds);
     this.updateSubscribeStatus();
+    userSync.syncUserToCloud();
   },
 
   // 更新订阅状态

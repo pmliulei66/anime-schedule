@@ -1,5 +1,6 @@
 // pages/anime-detail/anime-detail.js
 const animeData = require('../../utils/animeData.js');
+const userSync = require('../../utils/userSync.js');
 
 Page({
   data: {
@@ -67,5 +68,6 @@ Page({
     this.setData({
       isSubscribed: subscribedIds.includes(this.data.animeId)
     });
+    userSync.syncUserToCloud();
   }
 });

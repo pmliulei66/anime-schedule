@@ -1,7 +1,7 @@
 // pages/subscribe/subscribe.js
 const animeData = require('../../utils/animeData.js');
+const userSync = require('../../utils/userSync.js');
 
-// 订阅消息模板ID
 const TEMPLATE_ID = 'wEMtAbOoqVZQP1gj5SReCMiTJwvtpReSsmGOugyXslk';
 
 Page({
@@ -25,68 +25,63 @@ Page({
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 });
     }
+    this.loadSettings();
     this.loadSubscribedAnime();
   },
 
-  // 加载用户设置
   loadSettings() {
     const settings = wx.getStorageSync('userSettings') || {};
     this.setData({
-      notificationEnabled: settings.notificationEnabled || false
+      notificationEnabled: !!settings.notificationEnabled
     });
   },
 
-  // 切换推送通知开关
   toggleNotification(e) {
     const enabled = e.detail.value;
 
     if (enabled) {
-      // 开启时直接弹出授权
       wx.requestSubscribeMessage({
         tmplIds: [TEMPLATE_ID],
         success: (res) => {
-          if (res[TEMPLATE_ID] === 'accept') {
-            const settings = wx.getStorageSync('userSettings') || {};
-            settings.notificationEnabled = true;
-            wx.setStorageSync('userSettings', settings);
-            this.setData({ notificationEnabled: true });
-            wx.showToast({ title: '已开启推送', icon: 'success' });
-          } else {
-            // 用户拒绝授权，开关保持关闭
-            this.setData({ notificationEnabled: false });
-            wx.showToast({ title: '需要授权才能推送', icon: 'none' });
-          }
+          const accepted = res[TEMPLATE_ID] === 'accept';
+          this.saveNotificationEnabled(accepted);
+          wx.showToast({
+            title: accepted ? '已开启推送' : '需要授权才能推送',
+            icon: accepted ? 'success' : 'none'
+          });
         },
         fail: (err) => {
           console.error('订阅授权失败:', err);
-          this.setData({ notificationEnabled: false });
+          this.saveNotificationEnabled(false);
           wx.showToast({ title: '授权失败', icon: 'none' });
         }
       });
     } else {
-      // 关闭推送
-      const settings = wx.getStorageSync('userSettings') || {};
-      settings.notificationEnabled = false;
-      wx.setStorageSync('userSettings', settings);
-      this.setData({ notificationEnabled: false });
+      this.saveNotificationEnabled(false);
       wx.showToast({ title: '已关闭推送', icon: 'none' });
     }
-
-    // 同步到云数据库
-    this.syncUserToCloud();
   },
 
-  // 请求订阅消息授权
+  saveNotificationEnabled(enabled) {
+    const settings = wx.getStorageSync('userSettings') || {};
+    settings.notificationEnabled = enabled;
+    wx.setStorageSync('userSettings', settings);
+    this.setData({ notificationEnabled: enabled });
+    userSync.syncUserToCloud();
+  },
+
   requestSubscribeMessage() {
     wx.requestSubscribeMessage({
       tmplIds: [TEMPLATE_ID],
       success: (res) => {
-        console.log('订阅授权结果:', res);
-        if (res[TEMPLATE_ID] === 'accept') {
-          wx.showToast({ title: '授权成功', icon: 'success' });
-        } else {
-          wx.showToast({ title: '请允许通知', icon: 'none' });
+        const accepted = res[TEMPLATE_ID] === 'accept';
+        if (accepted) {
+          this.saveNotificationEnabled(true);
         }
+        wx.showToast({
+          title: accepted ? '授权成功' : '请允许通知',
+          icon: accepted ? 'success' : 'none'
+        });
       },
       fail: (err) => {
         console.error('订阅授权失败:', err);
@@ -95,55 +90,18 @@ Page({
     });
   },
 
-  // 同步用户数据到云数据库
   syncUserToCloud() {
-    if (!wx.cloud) return;
-
-    const db = wx.cloud.database();
-    const subscribedIds = wx.getStorageSync('subscribedIds') || [];
-    const settings = wx.getStorageSync('userSettings') || {};
-
-    // 获取用户 openid
-    wx.cloud.callFunction({
-      name: 'sendSubscribeMessage',
-      data: { action: 'getOpenId' }
-    }).then(res => {
-      const openid = res.result.openid;
-      db.collection('users').where({ openid: openid }).get().then(queryRes => {
-        if (queryRes.data.length > 0) {
-          // 更新
-          db.collection('users').doc(queryRes.data[0]._id).update({
-            data: {
-              subscribedAnimeIds: subscribedIds,
-              notificationEnabled: settings.notificationEnabled || false,
-              updatedAt: db.serverDate()
-            }
-          });
-        } else {
-          // 新增
-          db.collection('users').add({
-            data: {
-              openid: openid,
-              subscribedAnimeIds: subscribedIds,
-              notificationEnabled: settings.notificationEnabled || false,
-              createdAt: db.serverDate(),
-              updatedAt: db.serverDate()
-            }
-          });
-        }
-      });
-    }).catch(err => {
-      console.log('同步云数据库失败（云开发未配置）:', err.message);
-    });
+    return userSync.syncUserToCloud();
   },
 
-  // 加载订阅的番剧
   loadSubscribedAnime() {
     const subscribedIds = wx.getStorageSync('subscribedIds') || [];
-    
+
     if (subscribedIds.length === 0) {
       this.setData({
         subscribedAnime: [],
+        leftColumn: [],
+        rightColumn: [],
         subscribeCount: 0,
         todayUpdateCount: 0,
         weekUpdateCount: 0,
@@ -156,13 +114,11 @@ Page({
 
     animeData.getAllAnime().then(allAnime => {
       const subscribedAnime = allAnime.filter(anime => subscribedIds.includes(anime.id));
-
       const today = new Date().getDay() || 7;
       const todayUpdateCount = subscribedAnime.filter(anime => anime.broadcastDay == today).length;
-
-      // 分配到左右两列
       const leftColumn = [];
       const rightColumn = [];
+
       subscribedAnime.forEach((anime, index) => {
         if (index % 2 === 0) {
           leftColumn.push(anime);
@@ -172,11 +128,11 @@ Page({
       });
 
       this.setData({
-        subscribedAnime: subscribedAnime,
-        leftColumn: leftColumn,
-        rightColumn: rightColumn,
+        subscribedAnime,
+        leftColumn,
+        rightColumn,
         subscribeCount: subscribedIds.length,
-        todayUpdateCount: todayUpdateCount,
+        todayUpdateCount,
         weekUpdateCount: subscribedAnime.length,
         loading: false
       });
@@ -185,7 +141,6 @@ Page({
     });
   },
 
-  // 跳转详情页
   goToDetail(e) {
     const animeId = e.currentTarget.dataset.id;
     wx.navigateTo({
@@ -193,7 +148,6 @@ Page({
     });
   },
 
-  // 取消订阅
   unsubscribe(e) {
     const animeId = e.currentTarget.dataset.id;
     let subscribedIds = wx.getStorageSync('subscribedIds') || [];
@@ -204,11 +158,10 @@ Page({
       wx.setStorageSync('subscribedIds', subscribedIds);
       wx.showToast({ title: '已取消订阅', icon: 'success' });
       this.loadSubscribedAnime();
-      this.syncUserToCloud();
+      userSync.syncUserToCloud();
     }
   },
 
-  // 跳转到时间表
   goToIndex() {
     wx.switchTab({ url: '/pages/index/index' });
   }

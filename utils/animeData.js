@@ -3,6 +3,7 @@
 
 const api = require('./api.js');
 const anilist = require('./anilist.js');
+const { normalizeAnimeTitle } = require('./title.js');
 
 // ==================== Fallback 数据（网络完全不可用时使用） ====================
 
@@ -27,7 +28,7 @@ function getFallbackAnime() {
       status: 'finished', description: '网络不可用，无法加载数据',
       rating: 0, rank: 0, collection: {}
     }
-  ];
+  ].map(normalizeAnimeTitle);
 }
 
 // ==================== 多数据源获取策略 ====================

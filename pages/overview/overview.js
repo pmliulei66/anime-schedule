@@ -1,5 +1,6 @@
 // pages/overview/overview.js
 const animeData = require('../../utils/animeData.js');
+const userSync = require('../../utils/userSync.js');
 
 Page({
   data: {
@@ -142,6 +143,7 @@ Page({
 
     wx.setStorageSync('subscribedIds', subscribedIds);
     this.filterAnime();
+    userSync.syncUserToCloud();
   },
 
   // 更新订阅状态

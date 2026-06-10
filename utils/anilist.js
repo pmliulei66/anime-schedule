@@ -1,6 +1,8 @@
 // utils/anilist.js - AniList API 封装
 // 作为 Bangumi API 的备用数据源
 
+const { normalizeAnimeTitle } = require('./title.js');
+
 const ANILIST_URL = 'https://graphql.anilist.co';
 
 // ==================== GraphQL 查询 ====================
@@ -142,8 +144,13 @@ function transformAniListItem(media) {
     'HIATUS': 'airing'
   };
   
-  return {
+  return normalizeAnimeTitle({
     id: String(media.id),
+    source: 'anilist',
+    sourceId: String(media.id),
+    titleCn: '',
+    titleJp: media.title.native || '',
+    titleEn: titleEn,
     name: title,
     nameJp: media.title.native || '',
     nameEn: titleEn,
@@ -164,7 +171,7 @@ function transformAniListItem(media) {
     // AniList 特有字段
     nextAiringEpisode: media.nextAiringEpisode,
     anilistUrl: media.siteUrl
-  };
+  });
 }
 
 // 格式化日期为 YYYY-MM-DD

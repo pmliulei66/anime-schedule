@@ -1,5 +1,7 @@
 // utils/api.js - Bangumi API 请求服务
 
+const { normalizeAnimeTitle } = require('./title.js');
+
 const BASE_URL = 'https://api.bgm.tv';
 const CACHE_DURATION = 2 * 60 * 60 * 1000; // 2小时缓存
 
@@ -15,10 +17,10 @@ function setCache(key, data) {
   });
 }
 
-function getCache(key) {
+function getCache(key, allowExpired = false) {
   try {
     const cached = wx.getStorageSync(key);
-    if (cached && cached.data && (Date.now() - cached.timestamp < CACHE_DURATION)) {
+    if (cached && cached.data && (allowExpired || Date.now() - cached.timestamp < CACHE_DURATION)) {
       return cached.data;
     }
     return null;
@@ -73,8 +75,13 @@ function transformItem(item) {
   
   const currentEpisode = estimateCurrentEpisode(item.air_date, totalEpisodes);
   
-  return {
+  return normalizeAnimeTitle({
     id: String(item.id),
+    source: 'bangumi',
+    sourceId: String(item.id),
+    titleCn: item.name_cn || '',
+    titleJp: item.name || '',
+    titleEn: '',
     name: item.name_cn || item.name || '',
     nameJp: item.name || '',
     nameEn: '',
@@ -93,7 +100,7 @@ function transformItem(item) {
     rating: item.rating ? item.rating.score : 0,
     rank: item.rating ? item.rating.rank : 0,
     collection: item.collection || {}
-  };
+  });
 }
 
 // 根据播出日期估算当前集数
@@ -161,6 +168,14 @@ function fetchCalendar() {
       }));
       setCache(cacheKey, result);
       return result;
+    })
+    .catch(err => {
+      const staleCache = getCache(cacheKey, true);
+      if (staleCache) {
+        console.warn('使用过期 Bangumi 日历缓存', err.message || err);
+        return staleCache;
+      }
+      throw err;
     });
 }
 
@@ -206,6 +221,14 @@ function fetchAnimeDetail(id) {
       }
       setCache(cacheKey, result);
       return result;
+    })
+    .catch(err => {
+      const staleCache = getCache(cacheKey, true);
+      if (staleCache) {
+        console.warn('使用过期 Bangumi 详情缓存', err.message || err);
+        return staleCache;
+      }
+      throw err;
     });
 }
 

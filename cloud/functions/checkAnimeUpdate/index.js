@@ -1,6 +1,7 @@
 // 云函数：检查番剧更新并发送订阅消息
 // 由云开发定时触发器每天调用
 const cloud = require('wx-server-sdk');
+const fetch = require('node-fetch');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const db = cloud.database();
@@ -48,7 +49,7 @@ exports.main = async (event, context) => {
     let notifiedCount = 0;
 
     for (const user of users) {
-      const subscribedIds = user.subscribedAnimeIds || [];
+      const subscribedIds = (user.subscribedAnimeIds || []).map(String);
       const updatedAnime = subscribedIds
         .filter(id => animeMap[id])
         .map(id => animeMap[id]);
@@ -106,6 +107,9 @@ exports.main = async (event, context) => {
 async function fetchBangumiCalendar(dayOfWeek) {
   try {
     const response = await fetch(`${BASE_URL}/calendar`);
+    if (!response.ok) {
+      throw new Error(`Bangumi calendar status ${response.status}`);
+    }
     const data = await response.json();
 
     const dayGroup = data.find(g => g.weekday.id === dayOfWeek);
